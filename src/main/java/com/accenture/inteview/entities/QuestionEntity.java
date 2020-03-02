@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -19,16 +21,15 @@ public class QuestionEntity {
 	private Long id;
 	@Column(name = "NAME", nullable = false)
 	private String name;
-	@Column(name = "COMMENTS", nullable = true)
-	private String comments;
+	@Column(name = "COMMENT", nullable = true)
+	private String comment;
 
 	@ManyToMany
+	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
 	Set<TagEntity> tags;
 
-	
-
 	public Long getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(Long id) {
@@ -36,23 +37,23 @@ public class QuestionEntity {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public String getComments() {
-		return comments;
+	public String getcomment() {
+		return this.comment;
 	}
 
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setcomment(String comment) {
+		this.comment = comment;
 	}
 
 	public Set<TagEntity> getTags() {
-		return tags;
+		return this.tags;
 	}
 
 	public void setTags(Set<TagEntity> tags) {
@@ -62,10 +63,7 @@ public class QuestionEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", name=" + this.name + ", comments=" + this.comments + "]";
+		return "QuestionEntity [id=" + this.id + ", name=" + this.name + ", comment=" + this.comment + "]";
 	}
 
-
-	
-	
 }

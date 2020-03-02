@@ -13,8 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.accenture.inteview.entities.QuestionEntity;
-
 /**
  * @author nishant.b.grover
  *
@@ -30,7 +28,7 @@ public class TagEntity {
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "QUESTIONS_WITH_TAGS")
 	Set<QuestionEntity> questions;
 
 	public Long getId() {
