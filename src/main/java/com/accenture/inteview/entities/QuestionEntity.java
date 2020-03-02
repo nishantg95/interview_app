@@ -1,6 +1,6 @@
 package com.accenture.inteview.entities;
 
-public class Question {
+public class QuestionEntity {
 	
 	private Long id;
 	private String name;
