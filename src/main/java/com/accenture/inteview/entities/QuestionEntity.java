@@ -19,8 +19,8 @@ public class QuestionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "NAME", nullable = false)
-	private String name;
+	@Column(name = "TEXT", nullable = false)
+	private String text;
 	@Column(name = "COMMENT", nullable = true)
 	private String comment;
 
@@ -36,12 +36,12 @@ public class QuestionEntity {
 		this.id = id;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getText() {
+		return this.text;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	public String getcomment() {
@@ -63,7 +63,7 @@ public class QuestionEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", name=" + this.name + ", comment=" + this.comment + "]";
+		return "QuestionEntity [id=" + this.id + ", text=" + this.text + ", comment=" + this.comment + "]";
 	}
 
 }
