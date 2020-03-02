@@ -22,7 +22,7 @@ import javax.persistence.Table;
 public class TagEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Column(name = "NAME", nullable = false)
@@ -57,7 +57,26 @@ public class TagEntity {
 
 	@Override
 	public String toString() {
-		return "TagEntity [id=" + this.id + ", name=" + this.name + "]";
+		return "TagEntity [id=" + this.id + ", name=" + this.name + ", questions=" + this.questions + "]";
+	}
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param questions
+	 */
+	public TagEntity(String name, Set<QuestionEntity> questions) {
+		super();
+
+		this.name = name;
+		this.questions = questions;
+	}
+
+	/**
+	 *
+	 */
+	public TagEntity() {
+		super();
 	}
 
 }

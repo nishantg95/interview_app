@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class QuestionEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(name = "TEXT", nullable = false)
 	private String text;
@@ -61,9 +61,23 @@ public class QuestionEntity {
 
 	}
 
+	/**
+	 * @param id
+	 * @param text
+	 * @param comment
+	 * @param tags
+	 */
+	public QuestionEntity(String text, String comment, Set<TagEntity> tags) {
+		super();
+		this.text = text;
+		this.comment = comment;
+		this.tags = tags;
+	}
+
 	@Override
 	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", text=" + this.text + ", comment=" + this.comment + "]";
+		return "QuestionEntity [id=" + this.id + ", text=" + this.text + ", comment=" + this.comment + ", tags="
+				+ this.tags + "]";
 	}
 
 }
