@@ -25,7 +25,7 @@ public class QuestionEntity {
 	private String comment;
 
 	@ManyToMany
-	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "course_id"))
+	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
 
 	public Long getId() {

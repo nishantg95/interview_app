@@ -28,7 +28,7 @@ public class TagEntity {
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
-	@ManyToMany(mappedBy = "QUESTIONS_WITH_TAGS")
+	@ManyToMany(mappedBy = "tags")
 	Set<QuestionEntity> questions;
 
 	public Long getId() {
