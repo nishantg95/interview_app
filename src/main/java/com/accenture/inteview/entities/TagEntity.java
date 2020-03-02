@@ -25,7 +25,7 @@ public class TagEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;
@@ -33,11 +33,11 @@ public class TagEntity {
 	@ManyToMany
 	Set<QuestionEntity> questions;
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
