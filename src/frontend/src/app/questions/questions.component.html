@@ -1,0 +1,27 @@
+<form class="form-control inline" [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+	<table>
+		<tbody>
+			<tr>
+				<label>
+					Question body:
+					<input type="text" formControlName="text">
+				</label>
+			</tr>
+			<tr>
+				<label>
+					Comment/Hint/Answer:
+					<input type="text" formControlName="comment">
+				</label>
+			</tr>
+			<tr>
+				<label>
+					Added by:
+					<input type="text" formControlName="added_by">
+				</label>
+			</tr>
+			<tr>
+				<button type="submit" [disabled]="!questionForm.valid">Submit</button>
+			</tr>
+		</tbody>
+	</table>
+</form>
