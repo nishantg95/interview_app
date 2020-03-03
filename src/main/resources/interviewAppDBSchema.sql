@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `interviewapp` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `interviewapp`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
 -- Host: localhost    Database: interviewapp
@@ -25,14 +23,25 @@ DROP TABLE IF EXISTS `question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `question` (
-  `id` int(11) NOT NULL,
-  `text` varchar(300) NOT NULL,
-  `comment` varchar(300) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) NOT NULL,
+  `body` varchar(300) NOT NULL,
   `added_by` varchar(45) DEFAULT NULL,
+  `comment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idquestions_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Table for storing questions, that will be tied in to tags';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Table for storing questions, that will be tied in to tags';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question`
+--
+
+LOCK TABLES `question` WRITE;
+/*!40000 ALTER TABLE `question` DISABLE KEYS */;
+INSERT INTO `question` VALUES (2,'','What is an access modifier?',NULL,'HINT: Private/public/protected'),(4,'What is an access modifier in java?','What is an access modifier in java?',NULL,'HINT: Private/public/ updated after new field'),(6,'','What is an access modifier?',NULL,'HINT: Private/public/protected'),(8,'','What is an access modifier?',NULL,'HINT: Private/public/protected'),(10,'','What is an access modifier?',NULL,'HINT: Private/public/protected'),(11,'','What is the difference between an Inner Class and a Sub-Class?',NULL,'no description'),(12,'','What is the difference between an Inner Class and a Sub-Class?',NULL,'no description'),(14,'new question after update of fields?','What is an access modifier in java?',NULL,'HINT: Private/public/ updated after new field'),(15,'new question after id generation update?','What is an access modifier in java?',NULL,'HINT: Private/public/ updated after new field');
+/*!40000 ALTER TABLE `question` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `questions_with_tags`
@@ -45,11 +54,22 @@ CREATE TABLE `questions_with_tags` (
   `question_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL,
   PRIMARY KEY (`question_id`,`tag_id`),
+  KEY `question_id_idx` (`question_id`),
   KEY `tag_id_idx` (`tag_id`),
   CONSTRAINT `question_id` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`),
   CONSTRAINT `tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='This is a join table managed by JPA, where combination of the foreign keys (question.id and tag.id) will be its composite primary key.';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `questions_with_tags`
+--
+
+LOCK TABLES `questions_with_tags` WRITE;
+/*!40000 ALTER TABLE `questions_with_tags` DISABLE KEYS */;
+INSERT INTO `questions_with_tags` VALUES (4,3),(6,5),(8,7),(10,9),(11,3),(12,3),(14,3),(15,3);
+/*!40000 ALTER TABLE `questions_with_tags` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `tag`
@@ -59,11 +79,21 @@ DROP TABLE IF EXISTS `tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tag` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Stores tags that will be related to questions';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Stores tags that will be related to questions';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tag`
+--
+
+LOCK TABLES `tag` WRITE;
+/*!40000 ALTER TABLE `tag` DISABLE KEYS */;
+INSERT INTO `tag` VALUES (1,'Java'),(3,'Java'),(5,'Java'),(7,'Java'),(9,'Java');
+/*!40000 ALTER TABLE `tag` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -74,4 +104,4 @@ CREATE TABLE `tag` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-28 14:37:30
+-- Dump completed on 2020-03-03 14:20:11
