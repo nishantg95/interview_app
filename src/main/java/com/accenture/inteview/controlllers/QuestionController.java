@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,32 +19,33 @@ import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.services.QuestionService;
 
 @RestController
-@RequestMapping("/questionsApi")
+@RequestMapping("api/questions")
+@CrossOrigin(origins = { "http://localhost:4200" })
 public class QuestionController {
 
 	@Autowired
 	QuestionService questionService;
 
+	@GetMapping("/getAllQuestions")
+	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
+		List<QuestionEntity> questions = this.questionService.getAllQuestions();
+		if (questions.isEmpty()) {
+			return new ResponseEntity<List<QuestionEntity>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<QuestionEntity>>(questions, HttpStatus.OK);
+	}
+
 	@GetMapping("/getQuestion/{id}")
-	public ResponseEntity<?> getQuestion(@PathVariable Long id) {
-		Object RetrievedQuestion = questionService.getQuestion(id);
-		return new ResponseEntity<>(RetrievedQuestion, HttpStatus.OK);
+	public ResponseEntity<QuestionEntity> getQuestionById(@PathVariable Long id) {
+		QuestionEntity RetrievedQuestion = questionService.getQuestionById(id);
+		return new ResponseEntity<QuestionEntity>(RetrievedQuestion, HttpStatus.OK);
 	}
 
 	// TODO what if you create a question with a non-existent tag
 	@PostMapping("/createQuestion")
-	public ResponseEntity<QuestionEntity> createTag(@RequestBody QuestionEntity questionEntity) {
+	public ResponseEntity<QuestionEntity> createQuestion(@RequestBody QuestionEntity questionEntity) {
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
-		return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
-	}
-
-	@DeleteMapping("/deleteQuestion")
-	public ResponseEntity<HttpStatus> questionService(@RequestBody QuestionEntity questionEntity) {
-		int deleted = questionService.deleteQuestion(questionEntity);
-		if (deleted != 1) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/updateQuestion")
@@ -52,13 +54,12 @@ public class QuestionController {
 		return new ResponseEntity<QuestionEntity>(updatedQuestion, HttpStatus.OK);
 	}
 
-	@GetMapping("/getAllQuestions")
-	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
-
-		List<QuestionEntity> questions = this.questionService.getAllQuestions();
-		if (questions.isEmpty()) {
-			return new ResponseEntity<List<QuestionEntity>>(HttpStatus.NO_CONTENT);
+	@DeleteMapping("/deleteQuestion")
+	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
+		int deleted = questionService.deleteQuestion(questionEntity);
+		if (deleted != 1) {
+			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(questions, HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 }

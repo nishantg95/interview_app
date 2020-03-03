@@ -6,14 +6,13 @@ import com.accenture.inteview.entities.QuestionEntity;
 
 public interface QuestionService {
 
-	Object getQuestion(Long id);
+	List<QuestionEntity> getAllQuestions();
+
+	QuestionEntity getQuestionById(Long id);
 
 	QuestionEntity addQuestion(QuestionEntity questionEntity);
-
-	List<QuestionEntity> getAllQuestions();
 
 	QuestionEntity updateQuestion(QuestionEntity questionEntity);
 
 	int deleteQuestion(QuestionEntity questionEntity);
-
 }

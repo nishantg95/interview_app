@@ -15,10 +15,13 @@ public interface TagService {
 
 	List<TagEntity> getAllTags();
 
+	TagEntity getTagById(Long id);
+
+	TagEntity getTagByName(String name);
+
 	TagEntity addTag(TagEntity tagEntity);
 
-	TagEntity updateTag(TagEntity tagEntity);
+//	TagEntity updateTag(TagEntity tagEntity);
 
-	void delete(TagEntity tagEntity);
-
+	int deleteTag(TagEntity tagEntity);
 }
