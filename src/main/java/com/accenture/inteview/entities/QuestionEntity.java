@@ -28,6 +28,22 @@ public class QuestionEntity {
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
 
+	public QuestionEntity() {
+
+	}
+
+	/**
+	 * @param id
+	 * @param text
+	 * @param comment
+	 * @param tags
+	 */
+	public QuestionEntity(String text, String comment, Set<TagEntity> tags) {
+		this.text = text;
+		this.comment = comment;
+		this.tags = tags;
+	}
+
 	public Long getId() {
 		return this.id;
 	}
@@ -59,19 +75,6 @@ public class QuestionEntity {
 	public void setTags(Set<TagEntity> tags) {
 		this.tags = tags;
 
-	}
-
-	/**
-	 * @param id
-	 * @param text
-	 * @param comment
-	 * @param tags
-	 */
-	public QuestionEntity(String text, String comment, Set<TagEntity> tags) {
-		super();
-		this.text = text;
-		this.comment = comment;
-		this.tags = tags;
 	}
 
 	@Override
