@@ -6,7 +6,7 @@ import com.accenture.inteview.entities.QuestionEntity;
 
 public interface QuestionService {
 
-	QuestionEntity getQuestion(Long id);
+	Object getQuestion(Long id);
 
 	QuestionEntity addQuestion(QuestionEntity questionEntity);
 
@@ -14,6 +14,6 @@ public interface QuestionService {
 
 	QuestionEntity updateQuestion(QuestionEntity questionEntity);
 
-	Long deleteQuestion(QuestionEntity questionEntity);
+	int deleteQuestion(QuestionEntity questionEntity);
 
 }

@@ -12,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "QUESTION")
 public class QuestionEntity {
@@ -19,12 +21,18 @@ public class QuestionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column(name = "TEXT", nullable = false)
-	private String text;
+
+	@Column(name = "TITLE", nullable = false)
+	private String title;
+
+	@Column(name = "BODY", nullable = false)
+	private String body;
+
 	@Column(name = "COMMENT", nullable = true)
 	private String comment;
 
 	@ManyToMany
+	@JsonIgnoreProperties(value = "questions")
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
 
@@ -34,12 +42,12 @@ public class QuestionEntity {
 
 	/**
 	 * @param id
-	 * @param text
+	 * @param body
 	 * @param comment
 	 * @param tags
 	 */
-	public QuestionEntity(String text, String comment, Set<TagEntity> tags) {
-		this.text = text;
+	public QuestionEntity(String body, String comment, Set<TagEntity> tags) {
+		this.body = body;
 		this.comment = comment;
 		this.tags = tags;
 	}
@@ -52,12 +60,20 @@ public class QuestionEntity {
 		this.id = id;
 	}
 
-	public String getText() {
-		return this.text;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getbody() {
+		return this.body;
+	}
+
+	public void setbody(String body) {
+		this.body = body;
 	}
 
 	public String getcomment() {
@@ -79,8 +95,8 @@ public class QuestionEntity {
 
 	@Override
 	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", text=" + this.text + ", comment=" + this.comment + ", tags="
-				+ this.tags + "]";
+		return "QuestionEntity [id=" + this.id + ", title=" + this.title + ", body=" + this.body + ", comment="
+				+ this.comment + ", tags=" + this.tags + "]";
 	}
 
 }

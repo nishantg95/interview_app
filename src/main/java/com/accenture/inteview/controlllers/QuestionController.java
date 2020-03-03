@@ -25,33 +25,40 @@ public class QuestionController {
 	QuestionService questionService;
 
 	@GetMapping("/getQuestion/{id}")
-	public ResponseEntity<QuestionEntity> getQuestion(@PathVariable Long id) {
-		QuestionEntity RetrievedQuestion = questionService.getQuestion(id);
+	public ResponseEntity<?> getQuestion(@PathVariable Long id) {
+		Object RetrievedQuestion = questionService.getQuestion(id);
 		return new ResponseEntity<>(RetrievedQuestion, HttpStatus.OK);
 	}
 
+	// TODO what if you create a question with a non-existent tag
 	@PostMapping("/createQuestion")
-	public ResponseEntity<?> createTag(@RequestBody QuestionEntity questionEntity) {
+	public ResponseEntity<QuestionEntity> createTag(@RequestBody QuestionEntity questionEntity) {
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
 		return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping(value = "/deleteQuestion")
-	public ResponseEntity<?> questionService(@RequestBody QuestionEntity questionEntity) {
-		this.questionService.deleteQuestion(questionEntity);
-		return new ResponseEntity<>(null, HttpStatus.OK);
+	@DeleteMapping("/deleteQuestion")
+	public ResponseEntity<HttpStatus> questionService(@RequestBody QuestionEntity questionEntity) {
+		int deleted = questionService.deleteQuestion(questionEntity);
+		if (deleted != 1) {
+			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/updateQuestion")
-	public ResponseEntity<?> updateQuestion(@RequestBody QuestionEntity questionEntity) {
+	@PutMapping("/updateQuestion")
+	public ResponseEntity<QuestionEntity> updateQuestion(@RequestBody QuestionEntity questionEntity) {
 		QuestionEntity updatedQuestion = this.questionService.updateQuestion(questionEntity);
-		return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
+		return new ResponseEntity<QuestionEntity>(updatedQuestion, HttpStatus.OK);
 	}
 
 	@GetMapping("/getAllQuestions")
 	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
+
 		List<QuestionEntity> questions = this.questionService.getAllQuestions();
+		if (questions.isEmpty()) {
+			return new ResponseEntity<List<QuestionEntity>>(HttpStatus.NO_CONTENT);
+		}
 		return new ResponseEntity<>(questions, HttpStatus.OK);
 	}
-
 }

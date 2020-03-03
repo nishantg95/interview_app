@@ -19,9 +19,9 @@ public class QuestionServiceImpl implements QuestionService {
 	QuestionRepository questionRepository;
 
 	@Override
-	public QuestionEntity getQuestion(Long id) {
+	public Object getQuestion(Long id) {
 
-		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
+		Optional<?> questionOptional = questionRepository.findById(id);
 
 		if (!questionOptional.isPresent()) {
 			return null;
@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public Long deleteQuestion(QuestionEntity questionEntity) {
+	public int deleteQuestion(QuestionEntity questionEntity) {
 
 		return questionRepository.deleteQuestionById(questionEntity.getId());
 	}

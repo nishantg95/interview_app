@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author nishant.b.grover
  *
@@ -29,6 +31,7 @@ public class TagEntity {
 	private String name;
 
 	@ManyToMany(mappedBy = "tags")
+	@JsonIgnoreProperties(value = "tags")
 	Set<QuestionEntity> questions;
 
 	public Long getId() {

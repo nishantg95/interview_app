@@ -24,18 +24,18 @@ public class InterviewBackendApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-//		QuestionEntity questionEntity = new QuestionEntity("What is an access modifier?","HINT: Private/public/protected", new HashSet<TagEntity>());
-//		Set<QuestionEntity> questions = new HashSet<>();
-//		questions.add(questionEntity);
-//		
-//		TagEntity tagEntity = new TagEntity("Java", questions);
-//		Set<TagEntity> tags = new HashSet<>();
-//		tags.add(tagEntity);
-//		
-//		questionEntity.setTags(tags);
+//		 QuestionEntity questionEntity = new QuestionEntity("What is an access modifier?","HINT: Private/public/protected", new HashSet<TagEntity>());
+//			Set<QuestionEntity> questions = new HashSet<>();
+//			questions.add(questionEntity);
+//			
+//			TagEntity tagEntity = new TagEntity("Java", questions);
+//			Set<TagEntity> tags = new HashSet<>();
+//			tags.add(tagEntity);
+//			
+//			questionEntity.setTags(tags);
 //
-//		this.tagService.addTag(tagEntity);
-//		this.questionService.addQuestion(questionEntity);
+//			this.tagService.addTag(tagEntity);
+//			this.questionService.addQuestion(questionEntity);
 
 	}
 
