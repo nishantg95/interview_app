@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { QuestionsComponent } from '../app/questions/questions.component';
+import { QuestionFormComponent } from '../app/question-form/question-form.component';
 import { TagsComponent } from '../app/tags/tags.component';
 
 
 const routes: Routes = [
-  {path: 'questions', component: QuestionsComponent},
+  {path: 'questions', component: QuestionFormComponent},
   {path: 'tags', component: TagsComponent},
-  { path: '', redirectTo: 'questions', pathMatch: 'full' }
+  {path: '', redirectTo: 'questions', pathMatch: 'full' }
 ];
 
 @NgModule({
