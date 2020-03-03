@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author nishant.b.grover
  *
@@ -22,13 +24,14 @@ import javax.persistence.Table;
 public class TagEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
 	@ManyToMany(mappedBy = "tags")
+	@JsonIgnoreProperties(value = "tags")
 	Set<QuestionEntity> questions;
 
 	public Long getId() {

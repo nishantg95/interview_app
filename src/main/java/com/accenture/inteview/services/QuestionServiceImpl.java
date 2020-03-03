@@ -1,5 +1,6 @@
 package com.accenture.inteview.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -18,9 +19,9 @@ public class QuestionServiceImpl implements QuestionService {
 	QuestionRepository questionRepository;
 
 	@Override
-	public QuestionEntity getQuestion(Long id) {
+	public Object getQuestion(Long id) {
 
-		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
+		Optional<?> questionOptional = questionRepository.findById(id);
 
 		if (!questionOptional.isPresent()) {
 			return null;
@@ -30,6 +31,22 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public QuestionEntity addQuestion(QuestionEntity questionEntity) {
+		return questionRepository.save(questionEntity);
+	}
+
+	@Override
+	public List<QuestionEntity> getAllQuestions() {
+		return questionRepository.findAll();
+	}
+
+	@Override
+	public int deleteQuestion(QuestionEntity questionEntity) {
+
+		return questionRepository.deleteQuestionById(questionEntity.getId());
+	}
+
+	@Override
+	public QuestionEntity updateQuestion(QuestionEntity questionEntity) {
 		return questionRepository.save(questionEntity);
 	}
 

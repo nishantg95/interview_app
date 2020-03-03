@@ -1,32 +1,64 @@
 package com.accenture.inteview.controlllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.services.QuestionService;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/questionsApi")
 public class QuestionController {
 
 	@Autowired
 	QuestionService questionService;
 
-	@GetMapping("/question")
-	public QuestionEntity getQuestion(@RequestParam("id") Long id) {
-
-		return questionService.getQuestion(id);
+	@GetMapping("/getQuestion/{id}")
+	public ResponseEntity<?> getQuestion(@PathVariable Long id) {
+		Object RetrievedQuestion = questionService.getQuestion(id);
+		return new ResponseEntity<>(RetrievedQuestion, HttpStatus.OK);
 	}
 
-	@PostMapping("/postQuestion")
-	public QuestionEntity addQuestion(@RequestBody QuestionEntity questionEntity) {
-		return questionService.addQuestion(questionEntity);
+	// TODO what if you create a question with a non-existent tag
+	@PostMapping("/createQuestion")
+	public ResponseEntity<QuestionEntity> createTag(@RequestBody QuestionEntity questionEntity) {
+		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
+		return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 	}
 
+	@DeleteMapping("/deleteQuestion")
+	public ResponseEntity<HttpStatus> questionService(@RequestBody QuestionEntity questionEntity) {
+		int deleted = questionService.deleteQuestion(questionEntity);
+		if (deleted != 1) {
+			return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+	}
+
+	@PutMapping("/updateQuestion")
+	public ResponseEntity<QuestionEntity> updateQuestion(@RequestBody QuestionEntity questionEntity) {
+		QuestionEntity updatedQuestion = this.questionService.updateQuestion(questionEntity);
+		return new ResponseEntity<QuestionEntity>(updatedQuestion, HttpStatus.OK);
+	}
+
+	@GetMapping("/getAllQuestions")
+	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
+
+		List<QuestionEntity> questions = this.questionService.getAllQuestions();
+		if (questions.isEmpty()) {
+			return new ResponseEntity<List<QuestionEntity>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(questions, HttpStatus.OK);
+	}
 }
