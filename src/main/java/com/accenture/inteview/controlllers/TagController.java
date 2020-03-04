@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,20 +30,20 @@ public class TagController {
 	public ResponseEntity<List<TagEntity>> listAllTags() {
 		List<TagEntity> tags = this.tagService.getAllTags();
 		if (tags.isEmpty()) {
-			return new ResponseEntity<List<TagEntity>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<TagEntity>>(tags, HttpStatus.OK);
+		return new ResponseEntity<>(tags, HttpStatus.OK);
 	}
 
 	@GetMapping("/getTag/{id}")
 	public ResponseEntity<TagEntity> getTagById(@PathVariable Long id) {
-		TagEntity RetrievedTag = tagService.getTagById(id);
-		return new ResponseEntity<TagEntity>(RetrievedTag, HttpStatus.OK);
+		TagEntity RetrievedTag = this.tagService.getTagById(id);
+		return new ResponseEntity<>(RetrievedTag, HttpStatus.OK);
 	}
 
 	@GetMapping("/getTag/name/{name}")
 	public ResponseEntity<TagEntity> getTagByName(@PathVariable String name) {
-		TagEntity RetrievedTag = tagService.getTagByName(name);
+		TagEntity RetrievedTag = this.tagService.getTagByName(name);
 		return new ResponseEntity<>(RetrievedTag, HttpStatus.OK);
 	}
 
@@ -52,7 +51,7 @@ public class TagController {
 	public ResponseEntity<TagEntity> createTag(@RequestBody TagEntity tagEntity) {
 		// TODO: check if tag exists, since the names should be unique
 		TagEntity createdTag = this.tagService.addTag(tagEntity);
-		return new ResponseEntity<TagEntity>(createdTag, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdTag, HttpStatus.CREATED);
 	}
 
 //	@PutMapping("/updateTag")
@@ -65,8 +64,8 @@ public class TagController {
 	public ResponseEntity<HttpStatus> deleteTag(@RequestBody TagEntity tagEntity) {
 		int deleted = this.tagService.deleteTag(tagEntity);
 		if (deleted != 1) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

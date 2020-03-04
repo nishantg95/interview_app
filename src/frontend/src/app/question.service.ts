@@ -5,7 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { Question } from './interfaces/question';
 
-const endpoint = 'http://localhost:8080/questionsApi';
+const endpoint = 'http://localhost:8080/api/questions';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -79,13 +79,13 @@ export class QuestionService {
     return response;
   }
 
-  getQuestionById(id: number): Observable<{}>  {
-    const response = this.http
-      .get(endpoint + '/getQuestion/' + id)
+  getQuestionById(id: number): Observable<Question>  {
+    const request = this.http
+      .get<Question>(endpoint + '/getQuestion/' + id)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Question>('getQuestionById'))
       );
-    return response;
+    return request;
   }
 }

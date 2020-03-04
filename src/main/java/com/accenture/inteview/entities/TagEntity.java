@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "TAG")
-@JsonIgnoreProperties(value = "questions")
+//@JsonIgnoreProperties(value = "questions")
 public class TagEntity {
 
 	@Id

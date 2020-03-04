@@ -1,23 +1,4 @@
-<!-- <div class="row">
-  <td><h4>ID</h4></div>
-  <td><h4>Title</h4></div>
-  <td><h4>Body</h4></div>
-  <td><h4>Comment</h4></div>
-  <td><h4>Added By</h4></div>
-  <td><h4>Tags</h4></div>
-</div>
-
-<div class="row" *ngFor="let question of questions">
-  <td>{{question.id}}</div>
-  <td>{{question.title}}</div>
-  <td>{{question.body}}</div>
-  <td>{{question.comment}}</div>
-  <td>{{question.added_by}}</div>
-  <td *ngFor="let tag of question.tags">
-    <div>{{tag.name}}</div>
-  </div>
-</div> -->
-<table class="table table-bordered table-hover .w-auto">
+<table class="table table-bordered table-hover table-light .w-auto">
 <thead>
   <tr>
   <th><h4>ID</h4></th>
@@ -30,7 +11,7 @@
 </thead>
 
 <tbody>
-  <tr *ngFor="let question of questions.reverse()" [routerLink]="['/question/', question.id]">
+  <tr *ngFor="let question of questions?.reverse()" [routerLink]="['/question/', question.id]">
   <td>{{question.id}}</td>
   <td>{{question.title}}</td>
   <td>{{question.body}}</td>

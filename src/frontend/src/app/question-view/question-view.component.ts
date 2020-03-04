@@ -21,7 +21,8 @@ export class QuestionViewComponent implements OnInit {
   }
 
   getQuestionById(id: number): void {
-    this.questionService.getQuestionById(id).subscribe(question => console.log(question));
+    this.questionService.getQuestionById(id).subscribe(question => this.question = question);
   }
+
 
 }

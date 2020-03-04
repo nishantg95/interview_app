@@ -1,1 +1,16 @@
-<p>question-view works!</p>
+<div class="container bg-light">
+  <h4 class="mt-2 text-center">{{question?.title}}</h4>
+  <div class="container mt-5">
+    <div class="float-left">Tags&nbsp;&nbsp;:&nbsp;</div>
+    <div class="float-left" *ngFor="let tag of question.tags; let i = index">
+      {{tag.name}}
+      <span *ngIf="i < question.tags.length -1">,&nbsp;</span>
+    </div>
+    <div class="float-right">Created by&nbsp;:&nbsp;{{question?.added_by}}</div>
+  </div>
+  <br />
+  <div class="mt-5 container">
+    <h5 class="mt-5 text-left">{{question?.body}}</h5>
+  </div>
+  <p class="mt-5 text-info text-justify">{{question?.comment}}</p>
+</div>
