@@ -1,40 +1,28 @@
-<div class="container">
-  <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-sm-2">
-        <label>
-          Question body:
-        </label>
-      </div>
-      <div class="col-sm-2">
-        <textarea formControlName="text"></textarea>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-2">
-        <label>
-          Comment/Hint/Answer:
-        </label>
-      </div>
-      <div class="col-sm-2">
-        <input type="text" formControlName="comment" />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-2">
-        <label>
-          Added by:
-        </label>
-      </div>
-      <div class="col-sm-2">
-        <input type="text" formControlName="added_by" />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-2">
-        <button type="submit" [disabled]="!questionForm.valid">Submit</button>
-      </div>
-    </div>
-  </form>
-</div>
+<form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+  <label>
+    Title
+    <input type="text" formControlName="title" />
+  </label>
+<br>
+  <label>
+    Question body:
+    <textarea formControlName="body"></textarea>
+  </label>
+  <br>
+  <label>
+    Comment/Hint/Answer:
+    <input type="text" formControlName="comment" />
+  </label>
+  <br>
+  <label>
+    Added by:
+    <input type="text" formControlName="added_by" />
+  </label>
+  <br>
+  <label>
+    Tags
+    <input type="text" disabled formControlName="tags" />
+  </label>
+  <br>
+  <button type="submit" [disabled]="!questionForm.valid">Submit</button>
+</form>

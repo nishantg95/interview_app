@@ -5,7 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { Question } from './interfaces/question';
 
-const endpoint = 'http://localhost:8080/api/questions';
+const endpoint = 'http://localhost:8080/questionsApi';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -16,10 +16,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class QuestionService {
-
   questions: Observable<Question[]>;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Handle Http operation that failed.
@@ -30,7 +29,7 @@ export class QuestionService {
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // TODO: send the error to remote logging infrastructure
-      console.error(operation, error); // log to console instead
+      alert(operation); // log to console instead
 
       // TODO: better job of transforming error for user consumption
       // this.log(`${operation} failed: ${error.message}`);
@@ -43,14 +42,12 @@ export class QuestionService {
 
   listAllQuestions(): Observable<Question[]> {
     this.questions = this.http
-      .get<Question[]>(endpoint + 'INSERT STRING HERE')
+      .get<Question[]>(endpoint + '/getAllQuestions', httpOptions)
       .pipe(catchError(this.handleError<Question[]>('listAllQuestions', [])));
     return this.questions;
   }
 
-
   deleteQuestion(question: Question): Observable<{}> {
-    console.log(question.text);
     const response = this.http
       .request('delete', endpoint + 'INSERT STRING HERE', { body: question })
       .pipe(
@@ -59,15 +56,17 @@ export class QuestionService {
       );
     return response;
   }
-// check if question exists
+  // check if question exists
   addQuestion(question: Question): Observable<{}> {
+    console.log('WOOHOOO', question);
     const response = this.http
-      .post(endpoint + 'Insert String here', question, httpOptions)
+      .post(endpoint + '/createQuestion', question)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Question>('addQuestion'))
       );
     return response;
+    console.log(response);
   }
 
   updateQuestion(question: Question) {
@@ -80,9 +79,9 @@ export class QuestionService {
     return response;
   }
 
-  getQuestionById(id: number) {
+  getQuestionById(id: number): Observable<{}>  {
     const response = this.http
-      .put(endpoint + 'INSERT STRING HERE' + id, httpOptions)
+      .get(endpoint + '/getQuestion/' + id)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Question>('getQuestionById'))
