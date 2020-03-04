@@ -6,44 +6,53 @@
 	},
 	"item": [
 		{
-			"name": "getQuestion",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/questionsApi/getQuestion/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"questionsApi",
-						"getQuestion",
-						""
-					]
-				},
-				"description": "retrieves a question"
-			},
-			"response": []
-		},
-		{
 			"name": "getAllQuestions",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/questionsApi/getAllQuestions",
+					"raw": "http://localhost:8080/api/questions/getAllQuestions",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"questionsApi",
+						"api",
+						"questions",
 						"getAllQuestions"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 12,\r\n    \"text\": \"What is the difference between an Inner Class and a Sub-Class?\",\r\n    \"comment\": \"no description\",\r\n    \"tags\": [\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"Java\"\r\n        }\r\n    ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/questions/getQuestion/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"questions",
+						"getQuestion",
+						"12"
+					]
+				},
+				"description": "retrieves a question"
 			},
 			"response": []
 		},
@@ -69,14 +78,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/questionsApi/createQuestion",
+					"raw": "http://localhost:8080/api/questions/createQuestion",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"questionsApi",
+						"api",
+						"questions",
 						"createQuestion"
 					]
 				}
@@ -97,7 +107,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": " {\r\n \t\t  \"id\": 4,\r\n        \"text\": \"What is an access modifier in java?\",\r\n        \"comment\": \"HINT: Private/public/protected updated again\",\r\n        \"tags\": [\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"Java\"\r\n            }\r\n        ]\r\n    }",
+					"raw": " {\r\n        \"title\": \"new question after update of fields?\",\r\n        \"body\": \"What is an access modifier in java?\",\r\n        \"comment\": \"HINT: Private/public/ updated after new field\",\r\n        \"tags\": [\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"Java\"\r\n            }\r\n        ]\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -105,14 +115,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/questionsApi/updateQuestion",
+					"raw": "http://localhost:8080/api/questions/updateQuestion",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"questionsApi",
+						"api",
+						"questions",
 						"updateQuestion"
 					]
 				}
@@ -133,7 +144,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": " {\r\n \t\t  \"id\": 13,\r\n        \"text\": \"What is an access modifier?\",\r\n        \"comment\": \"HINT: Private/public/protected updated agin\",\r\n        \"tags\": [\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"Java\"\r\n            }\r\n        ]\r\n    }",
+					"raw": " {\r\n \t\t  \"id\": 4,\r\n        \"text\": \"What is an access modifier in java?\",\r\n        \"comment\": \"HINT: Private/public/protected updated again\",\r\n        \"tags\": [\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"Java\"\r\n            }\r\n        ]\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,15 +152,180 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/questionsApi/deleteQuestion",
+					"raw": "http://localhost:8080/api/questionsi/deleteQuestion",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"questionsApi",
+						"api",
+						"questionsi",
 						"deleteQuestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTags",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/tags/getAllTags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tags",
+						"getAllTags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTagById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/tags/getTag/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tags",
+						"getTag",
+						"11"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTagByName",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/tags/getTag/name/spring",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tags",
+						"getTag",
+						"name",
+						"spring"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createTag",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n        \r\n            { \r\n                \"name\": \"Level-12\"\r\n            }\r\n        ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/tags/createTag",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tags",
+						"createTag"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTag",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n        {\r\n    \"id\": 12,\r\n    \"name\": \"Level-11\",\r\n    \"questions\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/tags/deleteTag",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"tags",
+						"deleteTag"
 					]
 				}
 			},

@@ -19,10 +19,13 @@ public class QuestionServiceImpl implements QuestionService {
 	QuestionRepository questionRepository;
 
 	@Override
-	public Object getQuestion(Long id) {
+	public List<QuestionEntity> getAllQuestions() {
+		return questionRepository.findAll();
+	}
 
-		Optional<?> questionOptional = questionRepository.findById(id);
-
+	@Override
+	public QuestionEntity getQuestionById(Long id) {
+		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
 		if (!questionOptional.isPresent()) {
 			return null;
 		}
@@ -35,19 +38,13 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public List<QuestionEntity> getAllQuestions() {
-		return questionRepository.findAll();
+	public QuestionEntity updateQuestion(QuestionEntity questionEntity) {
+		return questionRepository.save(questionEntity);
 	}
 
 	@Override
 	public int deleteQuestion(QuestionEntity questionEntity) {
-
 		return questionRepository.deleteQuestionById(questionEntity.getId());
-	}
-
-	@Override
-	public QuestionEntity updateQuestion(QuestionEntity questionEntity) {
-		return questionRepository.save(questionEntity);
 	}
 
 }

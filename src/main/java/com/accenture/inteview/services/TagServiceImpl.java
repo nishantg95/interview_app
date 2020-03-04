@@ -4,6 +4,7 @@
 package com.accenture.inteview.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.repository.TagRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author nishant.b.grover
@@ -24,8 +26,27 @@ public class TagServiceImpl implements TagService {
 	private TagRepository tagRepository;
 
 	@Override
+	@JsonIgnoreProperties(value = "questions")
 	public List<TagEntity> getAllTags() {
 		return this.tagRepository.findAll();
+	}
+
+	@Override
+	public TagEntity getTagById(Long id) {
+		Optional<TagEntity> tagOptional = tagRepository.findById(id);
+		if (!tagOptional.isPresent()) {
+			return null;
+		}
+		return tagOptional.get();
+	}
+
+	@Override
+	public TagEntity getTagByName(String name) {
+		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
+		if (!tagOptional.isPresent()) {
+			return null;
+		}
+		return tagOptional.get();
 	}
 
 	@Override
@@ -33,14 +54,13 @@ public class TagServiceImpl implements TagService {
 		return this.tagRepository.save(tagEntity);
 	}
 
-	@Override
-	public TagEntity updateTag(TagEntity tagEntity) {
-		return this.tagRepository.save(tagEntity);
-	}
+//	@Override
+//	public TagEntity updateTag(TagEntity tagEntity) {
+//		return this.tagRepository.save(tagEntity);
+//	}
 
 	@Override
-	public void delete(TagEntity tagEntity) {
-		this.tagRepository.delete(tagEntity);
+	public int deleteTag(TagEntity tagEntity) {
+		return this.tagRepository.deleteTagById(tagEntity.getId());
 	}
-
 }
