@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.services.TagService;
 
 //TODO: Error handling
-@Controller
+@RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping(value = "api/tags")
-@CrossOrigin(origins = { "http://localhost:4200" })
 public class TagController {
 
 	@Autowired

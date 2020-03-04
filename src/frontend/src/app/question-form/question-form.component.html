@@ -1,0 +1,28 @@
+<form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+  <label>
+    Title
+    <input type="text" formControlName="title" />
+  </label>
+<br>
+  <label>
+    Question body:
+    <textarea formControlName="body"></textarea>
+  </label>
+  <br>
+  <label>
+    Comment/Hint/Answer:
+    <input type="text" formControlName="comment" />
+  </label>
+  <br>
+  <label>
+    Added by:
+    <input type="text" formControlName="added_by" />
+  </label>
+  <br>
+  <label>
+    Tags
+    <input type="text" disabled formControlName="tags" />
+  </label>
+  <br>
+  <button type="submit" [disabled]="!questionForm.valid">Submit</button>
+</form>

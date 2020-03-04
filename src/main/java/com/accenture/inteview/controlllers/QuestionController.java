@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.services.QuestionService;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("api/questions")
-@CrossOrigin(origins = { "http://localhost:4200" })
 public class QuestionController {
 
 	@Autowired
@@ -46,13 +46,16 @@ public class QuestionController {
 	public ResponseEntity<QuestionEntity> createQuestion(@RequestBody QuestionEntity questionEntity) {
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
 		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
+//	return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 	}
+
 
 	@PutMapping("/updateQuestion")
 	public ResponseEntity<QuestionEntity> updateQuestion(@RequestBody QuestionEntity questionEntity) {
 		QuestionEntity updatedQuestion = this.questionService.updateQuestion(questionEntity);
-		return new ResponseEntity<QuestionEntity>(updatedQuestion, HttpStatus.OK);
+		return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
 	}
+
 
 	@DeleteMapping("/deleteQuestion")
 	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
