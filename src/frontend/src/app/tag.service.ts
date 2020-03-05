@@ -79,9 +79,9 @@ export class TagService {
   //   return response;
   // }
 
-  getTagById(id: number) {
+  getTagById(id: number): Observable<Tag> {
     const response = this.http
-      .put(endpoint + '/getTag/' + id, httpOptions)
+      .get<Tag>(endpoint + '/getTag/' + id, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag>('getTagById'))
@@ -89,12 +89,12 @@ export class TagService {
     return response;
   }
 
-  getTagByName(name: string) {
+  getTagByName(name: string): Observable<Tag> {
     const response = this.http
-      .put(endpoint + '/getTag/name/' + name, httpOptions)
+      .get<Tag>(endpoint + '/getTag/name/' + name, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
-        catchError(this.handleError<Tag>('getTagById'))
+        catchError(this.handleError<Tag>('getTagByName'))
       );
     return response;
   }
