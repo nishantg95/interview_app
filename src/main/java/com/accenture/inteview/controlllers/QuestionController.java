@@ -1,10 +1,14 @@
 package com.accenture.inteview.controlllers;
 
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +39,15 @@ public class QuestionController {
 		return new ResponseEntity<List<QuestionEntity>>(questions, HttpStatus.OK);
 	}
 
+	@GetMapping("/getQuestions/tag/{tag}")
+	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagName(@PathVariable String tag) {
+		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagName(tag);
+		if (questions == null) {
+			return new ResponseEntity<Set<QuestionEntity>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Set<QuestionEntity>>(questions, HttpStatus.OK);
+	}
+
 	@GetMapping("/getQuestion/{id}")
 	public ResponseEntity<QuestionEntity> getQuestionById(@PathVariable Long id) {
 		QuestionEntity RetrievedQuestion = questionService.getQuestionById(id);
@@ -43,12 +56,15 @@ public class QuestionController {
 
 	// TODO what if you create a question with a non-existent tag
 	@PostMapping("/createQuestion")
-	public ResponseEntity<QuestionEntity> createQuestion(@RequestBody QuestionEntity questionEntity) {
+	public ResponseEntity<QuestionEntity> createQuestion(@Valid @RequestBody QuestionEntity questionEntity,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			return new ResponseEntity<QuestionEntity>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
 		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
 //	return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 	}
-
 
 	@PutMapping("/updateQuestion")
 	public ResponseEntity<QuestionEntity> updateQuestion(@RequestBody QuestionEntity questionEntity) {
@@ -56,7 +72,7 @@ public class QuestionController {
 		return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
 	}
 
-
+	// TODO deleting by id
 	@DeleteMapping("/deleteQuestion")
 	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
 		int deleted = questionService.deleteQuestion(questionEntity);

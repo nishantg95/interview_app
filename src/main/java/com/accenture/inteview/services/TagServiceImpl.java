@@ -34,19 +34,13 @@ public class TagServiceImpl implements TagService {
 	@Override
 	public TagEntity getTagById(Long id) {
 		Optional<TagEntity> tagOptional = tagRepository.findById(id);
-		if (!tagOptional.isPresent()) {
-			return null;
-		}
-		return tagOptional.get();
+		return !tagOptional.isPresent() ? null : tagOptional.get();
 	}
 
 	@Override
 	public TagEntity getTagByName(String name) {
 		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
-		if (!tagOptional.isPresent()) {
-			return null;
-		}
-		return tagOptional.get();
+		return !tagOptional.isPresent() ? null : tagOptional.get();
 	}
 
 	@Override
