@@ -10,6 +10,8 @@ import { QuestionFormComponent } from './question-form/question-form.component';
 import { TagsComponent } from './tags/tags.component';
 import { ListOfQuestionsComponent } from './list-of-questions/list-of-questions.component';
 import { QuestionViewComponent } from './question-view/question-view.component';
+import { QuestionsByTagNameComponent } from './questions-by-tag-name/questions-by-tag-name.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { QuestionViewComponent } from './question-view/question-view.component';
     QuestionFormComponent,
     TagsComponent,
     ListOfQuestionsComponent,
-    QuestionViewComponent
+    QuestionViewComponent,
+    QuestionsByTagNameComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
