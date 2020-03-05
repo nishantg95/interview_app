@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package com.accenture.inteview.entities;
 
 import java.util.Set;

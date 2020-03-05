@@ -6,12 +6,15 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +33,12 @@ public class QuestionController {
 	@Autowired
 	QuestionService questionService;
 
+	@InitBinder
+	public void initBinder(WebDataBinder dataBinder) {
+		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+	}
+
 	@GetMapping("/getAllQuestions")
 	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
 		List<QuestionEntity> questions = this.questionService.getAllQuestions();
@@ -40,8 +49,17 @@ public class QuestionController {
 	}
 
 	@GetMapping("/getQuestions/tag/{tag}")
-	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagName(@PathVariable String tag) {
-		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagName(tag);
+	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagName(@PathVariable String tagName) {
+		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagName(tagName);
+		if (questions == null) {
+			return new ResponseEntity<Set<QuestionEntity>>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<Set<QuestionEntity>>(questions, HttpStatus.OK);
+	}
+
+	@GetMapping("/getQuestions/tags/{tagsNames}")
+	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagsNames(@PathVariable String[] tagsNames) {
+		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagsNames(tagsNames);
 		if (questions == null) {
 			return new ResponseEntity<Set<QuestionEntity>>(HttpStatus.NO_CONTENT);
 		}
@@ -65,8 +83,7 @@ public class QuestionController {
 			return new ResponseEntity<QuestionEntity>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
-		return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
-//	return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
+		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/updateQuestion")
@@ -75,7 +92,6 @@ public class QuestionController {
 		return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
 	}
 
-	// TODO deleting by id
 	@DeleteMapping("/deleteQuestion")
 	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
 		int deleted = this.questionService.deleteQuestion(questionEntity);

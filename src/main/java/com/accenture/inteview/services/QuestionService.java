@@ -9,6 +9,8 @@ public interface QuestionService {
 
 	List<QuestionEntity> getAllQuestions();
 
+	Set<QuestionEntity> getQuestionsByTagsNames(String[] tagsNames);
+
 	Set<QuestionEntity> getQuestionsByTagName(String tag);
 
 	QuestionEntity getQuestionById(Long id);

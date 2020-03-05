@@ -1,5 +1,6 @@
 package com.accenture.inteview.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +27,18 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public List<QuestionEntity> getAllQuestions() {
 		return questionRepository.findAll();
+	}
+
+	@Override
+	public Set<QuestionEntity> getQuestionsByTagsNames(String[] tagsNames) {
+		Set<QuestionEntity> questions = new HashSet<>();
+		for (String tagName : tagsNames) {
+			Optional<TagEntity> questionOptional = tagRepository.findByNameIgnoreCase(tagName);
+			if (questionOptional.isPresent()) {
+				questions.addAll(questionOptional.get().getQuestions());
+			}
+		}
+		return questions.isEmpty() ? null : questions;
 	}
 
 	@Override
