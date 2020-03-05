@@ -1,5 +1,7 @@
+<app-navbar>
+</app-navbar>
 <div class="container">
-  {{questions.length}} questions found
+  {{questions.length}} question<span *ngIf="questions.length > 1">s</span> found
   <table class="mt-2 table table-bordered table-hover table-secondary .w-auto">
     <thead>
       <tr>
