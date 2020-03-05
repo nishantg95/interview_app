@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -21,10 +22,10 @@ public class QuestionEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	@NotBlank
 	@Column(name = "TITLE", nullable = false)
 	private String title;
-
+	@NotBlank
 	@Column(name = "BODY", nullable = false)
 	private String body;
 
