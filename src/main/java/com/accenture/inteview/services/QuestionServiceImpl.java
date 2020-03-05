@@ -2,6 +2,7 @@ package com.accenture.inteview.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.accenture.inteview.entities.QuestionEntity;
+import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.repository.QuestionRepository;
+import com.accenture.inteview.repository.TagRepository;
 
 @Service
 @Transactional
@@ -17,6 +20,8 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Autowired
 	QuestionRepository questionRepository;
+	@Autowired
+	TagRepository tagRepository;
 
 	@Override
 	public List<QuestionEntity> getAllQuestions() {
@@ -24,12 +29,15 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
+	public Set<QuestionEntity> getQuestionsByTagName(String tagName) {
+		Optional<TagEntity> questionOptional = tagRepository.findByNameIgnoreCase(tagName);
+		return !questionOptional.isPresent() ? null : questionOptional.get().getQuestions();
+	}
+
+	@Override
 	public QuestionEntity getQuestionById(Long id) {
 		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
-		if (!questionOptional.isPresent()) {
-			return null;
-		}
-		return questionOptional.get();
+		return !questionOptional.isPresent() ? null : questionOptional.get();
 	}
 
 	@Override
@@ -46,5 +54,4 @@ public class QuestionServiceImpl implements QuestionService {
 	public int deleteQuestion(QuestionEntity questionEntity) {
 		return questionRepository.deleteQuestionById(questionEntity.getId());
 	}
-
 }

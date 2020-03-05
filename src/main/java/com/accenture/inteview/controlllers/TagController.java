@@ -2,9 +2,12 @@ package com.accenture.inteview.controlllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,21 +38,24 @@ public class TagController {
 		return new ResponseEntity<>(tags, HttpStatus.OK);
 	}
 
-	@GetMapping("/getTag/{id}")
-	public ResponseEntity<TagEntity> getTagById(@PathVariable Long id) {
-		TagEntity RetrievedTag = this.tagService.getTagById(id);
-		return new ResponseEntity<>(RetrievedTag, HttpStatus.OK);
-	}
-
 	@GetMapping("/getTag/name/{name}")
 	public ResponseEntity<TagEntity> getTagByName(@PathVariable String name) {
-		TagEntity RetrievedTag = this.tagService.getTagByName(name);
-		return new ResponseEntity<>(RetrievedTag, HttpStatus.OK);
+		TagEntity retrievedTag = tagService.getTagByName(name);
+		if (retrievedTag == null) {
+			return new ResponseEntity<TagEntity>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(retrievedTag, HttpStatus.OK);
 	}
 
 	@PostMapping("/createTag")
-	public ResponseEntity<TagEntity> createTag(@RequestBody TagEntity tagEntity) {
-		// TODO: check if tag exists, since the names should be unique
+	public ResponseEntity<TagEntity> createTag(@Valid @RequestBody TagEntity tagEntity, BindingResult result) {
+		if (result.hasErrors()) {
+			return new ResponseEntity<TagEntity>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		TagEntity retrievedTag = tagService.getTagByName(tagEntity.getName());
+		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagEntity.getName())) {
+			return new ResponseEntity<TagEntity>(HttpStatus.IM_USED);
+		}
 		TagEntity createdTag = this.tagService.addTag(tagEntity);
 		return new ResponseEntity<>(createdTag, HttpStatus.CREATED);
 	}

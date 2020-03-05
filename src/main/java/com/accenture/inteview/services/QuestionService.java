@@ -1,12 +1,15 @@
 package com.accenture.inteview.services;
 
 import java.util.List;
+import java.util.Set;
 
 import com.accenture.inteview.entities.QuestionEntity;
 
 public interface QuestionService {
 
 	List<QuestionEntity> getAllQuestions();
+
+	Set<QuestionEntity> getQuestionsByTagName(String tag);
 
 	QuestionEntity getQuestionById(Long id);
 

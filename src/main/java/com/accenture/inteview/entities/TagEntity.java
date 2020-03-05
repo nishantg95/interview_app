@@ -76,11 +76,6 @@ public class TagEntity {
 		this.questions = questions;
 	}
 
-	/**
-	 *
-	 */
 	public TagEntity() {
-		super();
 	}
-
 }
