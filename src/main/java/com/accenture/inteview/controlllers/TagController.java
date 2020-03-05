@@ -33,19 +33,9 @@ public class TagController {
 	public ResponseEntity<List<TagEntity>> listAllTags() {
 		List<TagEntity> tags = this.tagService.getAllTags();
 		if (tags.isEmpty()) {
-			return new ResponseEntity<List<TagEntity>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<TagEntity>>(tags, HttpStatus.OK);
-	}
-
-	@GetMapping("/getTag/{id}")
-	public ResponseEntity<TagEntity> getTagById(@PathVariable Long id) {
-
-		TagEntity retrievedTag = tagService.getTagById(id);
-		if (retrievedTag == null) {
-			return new ResponseEntity<TagEntity>(HttpStatus.NO_CONTENT);
-		}
-		return new ResponseEntity<TagEntity>(retrievedTag, HttpStatus.OK);
+		return new ResponseEntity<>(tags, HttpStatus.OK);
 	}
 
 	@GetMapping("/getTag/name/{name}")
@@ -67,7 +57,7 @@ public class TagController {
 			return new ResponseEntity<TagEntity>(HttpStatus.IM_USED);
 		}
 		TagEntity createdTag = this.tagService.addTag(tagEntity);
-		return new ResponseEntity<TagEntity>(createdTag, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdTag, HttpStatus.CREATED);
 	}
 
 //	@PutMapping("/updateTag")
@@ -80,8 +70,8 @@ public class TagController {
 	public ResponseEntity<HttpStatus> deleteTag(@RequestBody TagEntity tagEntity) {
 		int deleted = this.tagService.deleteTag(tagEntity);
 		if (deleted != 1) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

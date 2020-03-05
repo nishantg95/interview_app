@@ -9,11 +9,11 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
   styleUrls: ['./question-view.component.css']
 })
 export class QuestionViewComponent implements OnInit {
-
   question: Question;
-  constructor(private questionService: QuestionService,  private route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(
+    private questionService: QuestionService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -21,7 +21,8 @@ export class QuestionViewComponent implements OnInit {
   }
 
   getQuestionById(id: number): void {
-    this.questionService.getQuestionById(id).subscribe(question => console.log(question));
+    this.questionService
+      .getQuestionById(id)
+      .subscribe(question => (this.question = question));
   }
-
 }

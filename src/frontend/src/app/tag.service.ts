@@ -43,7 +43,7 @@ export class TagService {
 
   listAllTags(): Observable<Tag[]> {
     this.tags = this.http
-      .get<Tag[]>(endpoint + 'INSERT STRING HERE')
+      .get<Tag[]>(endpoint + '/getAllTags')
       .pipe(catchError(this.handleError<Tag[]>('listAllTags', [])));
     return this.tags;
   }
@@ -51,7 +51,7 @@ export class TagService {
 
   deleteTag(tag: Tag): Observable<{}> {
     const response = this.http
-      .request('delete', endpoint + 'INSERT STRING HERE', { body: tag })
+      .request('delete', endpoint + '/deleteTag', { body: tag })
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag>('deleteTag'))
@@ -61,7 +61,7 @@ export class TagService {
 
   addTag(tag: Tag): Observable<{}> {
     const response = this.http
-      .post(endpoint + 'Insert String here', tag, httpOptions)
+      .post(endpoint + '/createTag', tag, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag>('addTag'))
@@ -69,19 +69,29 @@ export class TagService {
     return response;
   }
 
-  updateTag(tag: Tag) {
+  // updateTag(tag: Tag) {
+  //   const response = this.http
+  //     .put(endpoint + 'INSERT STRING HERE', tag, httpOptions)
+  //     .pipe(
+  //       // tap(_ => this.log(`deleted item id=${item.id}`)),
+  //       catchError(this.handleError<Tag>('updateTag'))
+  //     );
+  //   return response;
+  // }
+
+  getTagById(id: number) {
     const response = this.http
-      .put(endpoint + 'INSERT STRING HERE', tag, httpOptions)
+      .put(endpoint + '/getTag/' + id, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
-        catchError(this.handleError<Tag>('updateTag'))
+        catchError(this.handleError<Tag>('getTagById'))
       );
     return response;
   }
 
-  getTagById(id: number) {
+  getTagByName(name: string) {
     const response = this.http
-      .put(endpoint + 'INSERT STRING HERE' + id, httpOptions)
+      .put(endpoint + '/getTag/name/' + name, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag>('getTagById'))

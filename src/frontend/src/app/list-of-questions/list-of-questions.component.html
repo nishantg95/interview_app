@@ -1,43 +1,31 @@
-<!-- <div class="row">
-  <td><h4>ID</h4></div>
-  <td><h4>Title</h4></div>
-  <td><h4>Body</h4></div>
-  <td><h4>Comment</h4></div>
-  <td><h4>Added By</h4></div>
-  <td><h4>Tags</h4></div>
+<div class="container">
+  <table class="mt-2 table table-bordered table-hover table-secondary .w-auto">
+    <thead>
+      <tr>
+        <th><h4>Questions</h4></th>
+        <th><h4>Added By</h4></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let question of questions?.reverse()">
+        <td class="click">
+          <div class="container-fluid" [routerLink]="['/question/', question.id]">
+          <h6>{{ question.title }}</h6>
+          {{
+            question.body.length > 50
+              ? (question.body | slice: 0:50) + "..."
+              : question.body
+          }}
+        </div>
+          <div class="container">
+            <div class="row">
+              <app-tags *ngFor="let tag of question.tags" [tag]="tag" [routerLink]="['/questions/tagged', tag.name]"></app-tags>
+            </div>
+          </div>
+        </td>
+        <td>{{ question.added_by }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
-<div class="row" *ngFor="let question of questions">
-  <td>{{question.id}}</div>
-  <td>{{question.title}}</div>
-  <td>{{question.body}}</div>
-  <td>{{question.comment}}</div>
-  <td>{{question.added_by}}</div>
-  <td *ngFor="let tag of question.tags">
-    <div>{{tag.name}}</div>
-  </div>
-</div> -->
-<table class="table table-bordered table-hover .w-auto">
-<thead>
-  <tr>
-  <th><h4>ID</h4></th>
-  <th><h4>Title</h4></th>
-  <th><h4>Body</h4></th>
-  <th><h4>Comment</h4></th>
-  <th><h4>Added By</h4></th>
-  <th><h4>Tags</h4></th>
-</tr>
-</thead>
-
-<tbody>
-  <tr *ngFor="let question of questions.reverse()" [routerLink]="['/question/', question.id]">
-  <td>{{question.id}}</td>
-  <td>{{question.title}}</td>
-  <td>{{question.body}}</td>
-  <td>{{question.comment}}</td>
-  <td>{{question.added_by}}</td>
-  <td>
-    <p *ngFor="let tag of question.tags">{{tag.name}}</p>
-  </td>
-  </tr>
-</table>

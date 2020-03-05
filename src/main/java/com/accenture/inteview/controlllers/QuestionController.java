@@ -34,9 +34,9 @@ public class QuestionController {
 	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
 		List<QuestionEntity> questions = this.questionService.getAllQuestions();
 		if (questions.isEmpty()) {
-			return new ResponseEntity<List<QuestionEntity>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<QuestionEntity>>(questions, HttpStatus.OK);
+		return new ResponseEntity<>(questions, HttpStatus.OK);
 	}
 
 	@GetMapping("/getQuestions/tag/{tag}")
@@ -50,8 +50,11 @@ public class QuestionController {
 
 	@GetMapping("/getQuestion/{id}")
 	public ResponseEntity<QuestionEntity> getQuestionById(@PathVariable Long id) {
-		QuestionEntity RetrievedQuestion = questionService.getQuestionById(id);
-		return new ResponseEntity<QuestionEntity>(RetrievedQuestion, HttpStatus.OK);
+		QuestionEntity retrievedQuestion = this.questionService.getQuestionById(id);
+		if (retrievedQuestion == null) {
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(retrievedQuestion, HttpStatus.OK);
 	}
 
 	// TODO what if you create a question with a non-existent tag
@@ -62,7 +65,7 @@ public class QuestionController {
 			return new ResponseEntity<QuestionEntity>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
-		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 //	return new ResponseEntity<>(createdQuestion, HttpStatus.CREATED);
 	}
 
@@ -75,10 +78,10 @@ public class QuestionController {
 	// TODO deleting by id
 	@DeleteMapping("/deleteQuestion")
 	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
-		int deleted = questionService.deleteQuestion(questionEntity);
+		int deleted = this.questionService.deleteQuestion(questionEntity);
 		if (deleted != 1) {
-			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

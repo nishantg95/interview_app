@@ -31,6 +31,9 @@ public class QuestionEntity {
 	@Column(name = "COMMENT", nullable = true)
 	private String comment;
 
+	@Column(name = "ADDED_BY", nullable = true)
+	private String added_by;
+
 	@ManyToMany
 	@JsonIgnoreProperties(value = "questions")
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -61,27 +64,35 @@ public class QuestionEntity {
 	}
 
 	public String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public String getbody() {
+	public String getBody() {
 		return this.body;
 	}
 
-	public void setbody(String body) {
+	public void setBody(String body) {
 		this.body = body;
 	}
 
-	public String getcomment() {
+	public String getComment() {
 		return this.comment;
 	}
 
-	public void setcomment(String comment) {
+	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getAdded_by() {
+		return this.added_by;
+	}
+
+	public void setAdded_by(String added_by) {
+		this.added_by = added_by;
 	}
 
 	public Set<TagEntity> getTags() {
@@ -90,13 +101,12 @@ public class QuestionEntity {
 
 	public void setTags(Set<TagEntity> tags) {
 		this.tags = tags;
-
 	}
 
 	@Override
 	public String toString() {
 		return "QuestionEntity [id=" + this.id + ", title=" + this.title + ", body=" + this.body + ", comment="
-				+ this.comment + ", tags=" + this.tags + "]";
+				+ this.comment + ", added_by=" + this.added_by + ", tags=" + this.tags + "]";
 	}
 
 }
