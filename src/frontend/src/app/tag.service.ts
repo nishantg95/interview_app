@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Tag } from './interfaces/tag';
+import { JsonPipe } from '@angular/common';
 
 const endpoint = 'http://localhost:8080/api/tags';
 const httpOptions = {
@@ -16,10 +17,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class TagService {
-
   tags: Observable<Tag[]>;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Handle Http operation that failed.
@@ -48,7 +48,6 @@ export class TagService {
     return this.tags;
   }
 
-
   deleteTag(tag: Tag): Observable<{}> {
     const response = this.http
       .request('delete', endpoint + '/deleteTag', { body: tag })
@@ -59,13 +58,15 @@ export class TagService {
     return response;
   }
 
-  addTag(tag: Tag): Observable<{}> {
+  addTag(tag: Tag): Observable<Tag> {
     const response = this.http
-      .post(endpoint + '/createTag', tag, httpOptions)
+      .post<Tag>(endpoint + '/createTag', tag, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag>('addTag'))
       );
+    console.log('Adding Tag');
+    // console.log('Response', response);
     return response;
   }
 

@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class ListOfQuestionsComponent implements OnInit, OnChanges {
   @Input() state: string;
   @Input() tag: string;
-  questions: Question[];
+  questions: Question[] = [];
   constructor(
     private questionService: QuestionService,
     private tagService: TagService,
