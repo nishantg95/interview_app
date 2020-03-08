@@ -1,8 +1,9 @@
+<app-navbar></app-navbar>
 <div class="container bg-light">
   <h4 class="mt-2 text-center">{{question?.title}}</h4>
   <div class="container mt-5">
     <div class="float-left mt-2">Tags&nbsp;&nbsp;:&nbsp;</div>
-    <div class="float-left row ml-2"> 
+    <div class="float-left row ml-2">
       <app-tags *ngFor="let tag of question?.tags" [tag]="tag" [routerLink]="['/questions/tagged', tag.name]"></app-tags>
     </div>
     <div class="float-right mt-2">Created by&nbsp;:&nbsp;{{question?.added_by}}</div>
