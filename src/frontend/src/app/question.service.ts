@@ -58,7 +58,6 @@ export class QuestionService {
   }
   // check if question exists
   addQuestion(question: Question): Observable<{}> {
-    console.debug('WOOHOOO', question.tags.toString);
     const response = this.http
       .post(endpoint + '/createQuestion', question)
       .pipe(
@@ -66,7 +65,6 @@ export class QuestionService {
         catchError(this.handleError<Question>('addQuestion'))
       );
     return response;
-    console.log(response);
   }
 
   updateQuestion(question: Question) {
