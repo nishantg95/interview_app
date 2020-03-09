@@ -11,35 +11,52 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.beans.BeanUtils;
+
+import com.accenture.inteview.models.Question;
 
 @Entity
 @Table(name = "QUESTION")
-public class QuestionEntity {
+public class QuestionEntity implements Question {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "TEXT", nullable = false)
-	private String text;
+	@Column(name = "TITLE", nullable = false)
+	private String title;
+	@NotBlank
+	@Column(name = "BODY", nullable = false)
+	private String body;
+
 	@Column(name = "COMMENT", nullable = true)
 	private String comment;
+
+	@Column(name = "ADDED_BY", nullable = true)
+	private String added_by;
 
 	@ManyToMany
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
+	// Set<TagEntity> tags = new HashSet<>();
 
 	public QuestionEntity() {
 
 	}
 
+	public QuestionEntity(Question question) {
+		BeanUtils.copyProperties(question, this, Question.class);
+	}
+
 	/**
 	 * @param id
-	 * @param text
+	 * @param body
 	 * @param comment
 	 * @param tags
 	 */
-	public QuestionEntity(String text, String comment, Set<TagEntity> tags) {
-		this.text = text;
+	public QuestionEntity(String body, String comment, Set<TagEntity> tags) {
+		this.body = body;
 		this.comment = comment;
 		this.tags = tags;
 	}
@@ -52,20 +69,36 @@ public class QuestionEntity {
 		this.id = id;
 	}
 
-	public String getText() {
-		return this.text;
+	public String getTitle() {
+		return this.title;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getcomment() {
+	public String getBody() {
+		return this.body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public String getComment() {
 		return this.comment;
 	}
 
-	public void setcomment(String comment) {
+	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getAdded_by() {
+		return this.added_by;
+	}
+
+	public void setAdded_by(String added_by) {
+		this.added_by = added_by;
 	}
 
 	public Set<TagEntity> getTags() {
@@ -74,13 +107,5 @@ public class QuestionEntity {
 
 	public void setTags(Set<TagEntity> tags) {
 		this.tags = tags;
-
 	}
-
-	@Override
-	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", text=" + this.text + ", comment=" + this.comment + ", tags="
-				+ this.tags + "]";
-	}
-
 }
