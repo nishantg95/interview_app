@@ -1,0 +1,22 @@
+.searchPrompt {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  max-width: 40%;
+  z-index: 99;
+  top: 85%;
+  overflow-wrap: inherit;
+
+  /* left: 0;
+  right: 0; */
+  background-color: whitesmoke;
+}
+
+
+.searchPrompt:hover {
+  /*when hovering an item:*/
+  background-color: DodgerBlue;
+  color: #ffffff;
+  overflow-wrap: inherit;
+}

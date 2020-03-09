@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a [routerLink]="['/questions']" class="navbar-brand" >Home</a>
+  <a [routerLink]="['/questions']" class="navbar-brand">Home</a>
   <button
     class="navbar-toggler"
     type="button"
@@ -13,18 +13,51 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto mt-2 mt-m-0"></ul>
-    <button [routerLink]="['/addQuestion']" class="btn btn-primary my-2 mr-sm-4 my-sm-0">
+    <ul class="navbar-nav mr-auto mt-2 mt-m-0">
+      <button
+      [routerLink]="['/addQuestion']"
+      class="btn btn-primary my-2 mr-sm-4 my-sm-0"
+    >
       Add Question
     </button>
-    <form class="form-inline my-2 my-lg-0">
-      <input
-        class="form-control mr-sm-2"
-        type="search"
-        placeholder="Search"
-        aria-label="Search"
-      />
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+    </ul>
+
+    <form
+      [formGroup]="searchForm"
+      autocomplete="off"
+      class="form-inline my-2 my-lg-0"
+      id="search_form"
+      (ngSubmit)="onSubmit()"
+    >
+      <div class="form-group">
+        <input
+          class="form-control mr-sm-2 has-feedback"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          id="search_box"
+          formControlName="query"
+          (focus)="this.showPrompt = true"
+          (blur)="this.showPrompt = false"
+        />
+        <div class="searchPrompt" *ngIf="this.showPrompt">
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum
+        </div>
+      </div>
+
+      <button
+        class="btn btn-outline-success my-2 my-sm-0"
+        type="submit"
+        id="search_button"
+      >
         Search
       </button>
     </form>
