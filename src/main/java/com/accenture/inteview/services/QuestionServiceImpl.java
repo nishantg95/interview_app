@@ -1,5 +1,6 @@
 package com.accenture.inteview.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.entities.TagEntity;
+import com.accenture.inteview.models.Question;
+import com.accenture.inteview.models.QuestionView;
+import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.repository.QuestionRepository;
 import com.accenture.inteview.repository.TagRepository;
 
@@ -25,46 +29,71 @@ public class QuestionServiceImpl implements QuestionService {
 	TagRepository tagRepository;
 
 	@Override
-	public List<QuestionEntity> getAllQuestions() {
-		return questionRepository.findAll();
+	public List<Question> getAllQuestions() {
+		List<Question> questions = new ArrayList<>();
+		List<QuestionEntity> questionEntities = questionRepository.findAll();
+		for (Question question : questionEntities) {
+			Question questionView = new QuestionView(question);
+			questions.add(questionView);
+		}
+		return questions;
 	}
 
 	@Override
-	public Set<QuestionEntity> getQuestionsByTagsNames(String[] tagsNames) {
-		Set<QuestionEntity> questions = new HashSet<>();
+	public Set<Question> getQuestionsByTagsNames(String[] tagsNames) {
+		Set<Question> questionEntities = new HashSet<>();
+		Set<Question> questionViews = new HashSet<>();
 		for (String tagName : tagsNames) {
-			Optional<TagEntity> questionOptional = tagRepository.findByNameIgnoreCase(tagName);
-			if (questionOptional.isPresent()) {
-				questions.addAll(questionOptional.get().getQuestions());
+			Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(tagName);
+			if (tagOptional.isPresent()) {
+				Tag tag = tagOptional.get();
+				questionEntities.addAll(tag.getQuestions());
 			}
 		}
-		return questions.isEmpty() ? null : questions;
+		for (Question question : questionEntities) {
+			Question questionView = new QuestionView(question);
+			questionViews.add(questionView);
+		}
+		return questionViews.isEmpty() ? null : questionViews;
 	}
 
 	@Override
-	public Set<QuestionEntity> getQuestionsByTagName(String tagName) {
-		Optional<TagEntity> questionOptional = tagRepository.findByNameIgnoreCase(tagName);
-		return !questionOptional.isPresent() ? null : questionOptional.get().getQuestions();
+	public Set<Question> getQuestionsByTagName(String tagName) {
+		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(tagName);
+		Set<QuestionEntity> questionEntities = new HashSet<>();
+		Set<Question> questionViews = new HashSet<>();
+		if (tagOptional.isPresent()) {
+			questionEntities = tagOptional.get().getQuestions();
+			for (Question question : questionEntities) {
+				Question questionView = new QuestionView(question);
+				questionViews.add(questionView);
+			}
+		}
+		return questionViews.isEmpty() ? null : questionViews;
 	}
 
 	@Override
-	public QuestionEntity getQuestionById(Long id) {
+	public Question getQuestionById(Long id) {
 		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
-		return !questionOptional.isPresent() ? null : questionOptional.get();
+		return !questionOptional.isPresent() ? null : new QuestionView(questionOptional.get());
 	}
 
 	@Override
-	public QuestionEntity addQuestion(QuestionEntity questionEntity) {
-		return questionRepository.save(questionEntity);
+	public Question addQuestion(Question question) {
+		QuestionEntity questionEntity = new QuestionEntity(question);
+		Question savedQuestion = questionRepository.save(questionEntity);
+		return new QuestionView(savedQuestion);
 	}
 
 	@Override
-	public QuestionEntity updateQuestion(QuestionEntity questionEntity) {
-		return questionRepository.save(questionEntity);
+	public Question updateQuestion(Question question) {
+		QuestionEntity questionEntity = new QuestionEntity(question);
+		Question updatedQuestion = questionRepository.save(questionEntity);
+		return new QuestionView(updatedQuestion);
 	}
 
 	@Override
-	public int deleteQuestion(QuestionEntity questionEntity) {
-		return questionRepository.deleteQuestionById(questionEntity.getId());
+	public int deleteQuestion(Question question) {
+		return questionRepository.deleteQuestionById(question.getId());
 	}
 }

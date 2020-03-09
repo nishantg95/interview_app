@@ -13,16 +13,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.beans.BeanUtils;
+
+import com.accenture.inteview.models.Question;
 
 @Entity
 @Table(name = "QUESTION")
-public class QuestionEntity {
+public class QuestionEntity implements Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
 	@Column(name = "TITLE", nullable = false)
 	private String title;
 	@NotBlank
@@ -36,12 +37,16 @@ public class QuestionEntity {
 	private String added_by;
 
 	@ManyToMany
-	@JsonIgnoreProperties(value = "questions")
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
+	// Set<TagEntity> tags = new HashSet<>();
 
 	public QuestionEntity() {
 
+	}
+
+	public QuestionEntity(Question question) {
+		BeanUtils.copyProperties(question, this, Question.class);
 	}
 
 	/**
@@ -103,11 +108,4 @@ public class QuestionEntity {
 	public void setTags(Set<TagEntity> tags) {
 		this.tags = tags;
 	}
-
-	@Override
-	public String toString() {
-		return "QuestionEntity [id=" + this.id + ", title=" + this.title + ", body=" + this.body + ", comment="
-				+ this.comment + ", added_by=" + this.added_by + ", tags=" + this.tags + "]";
-	}
-
 }

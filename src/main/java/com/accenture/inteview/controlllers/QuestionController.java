@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accenture.inteview.entities.QuestionEntity;
+import com.accenture.inteview.models.Question;
+import com.accenture.inteview.models.QuestionView;
 import com.accenture.inteview.services.QuestionService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -40,64 +41,64 @@ public class QuestionController {
 	}
 
 	@GetMapping("/getAllQuestions")
-	public ResponseEntity<List<QuestionEntity>> listAllQuestions() {
-		List<QuestionEntity> questions = this.questionService.getAllQuestions();
+	public ResponseEntity<List<Question>> listAllQuestions() {
+		List<Question> questions = this.questionService.getAllQuestions();
 		if (questions.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<List<Question>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(questions, HttpStatus.OK);
+		return new ResponseEntity<List<Question>>(questions, HttpStatus.OK);
 	}
 
-	@GetMapping("/getQuestions/tag/{tag}")
-	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagName(@PathVariable String tagName) {
-		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagName(tagName);
+	@GetMapping("/getQuestions/tag/{tagName}")
+	public ResponseEntity<Set<Question>> getQuestionsByTagName(@PathVariable String tagName) {
+		Set<Question> questions = this.questionService.getQuestionsByTagName(tagName);
 		if (questions == null) {
-			return new ResponseEntity<Set<QuestionEntity>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Set<Question>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Set<QuestionEntity>>(questions, HttpStatus.OK);
+		return new ResponseEntity<Set<Question>>(questions, HttpStatus.OK);
 	}
 
 	@GetMapping("/getQuestions/tags/{tagsNames}")
-	public ResponseEntity<Set<QuestionEntity>> getQuestionsByTagsNames(@PathVariable String[] tagsNames) {
-		Set<QuestionEntity> questions = this.questionService.getQuestionsByTagsNames(tagsNames);
+	public ResponseEntity<Set<Question>> getQuestionsByTagsNames(@PathVariable String[] tagsNames) {
+		Set<Question> questions = this.questionService.getQuestionsByTagsNames(tagsNames);
 		if (questions == null) {
-			return new ResponseEntity<Set<QuestionEntity>>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Set<Question>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Set<QuestionEntity>>(questions, HttpStatus.OK);
+		return new ResponseEntity<Set<Question>>(questions, HttpStatus.OK);
 	}
 
 	@GetMapping("/getQuestion/{id}")
-	public ResponseEntity<QuestionEntity> getQuestionById(@PathVariable Long id) {
-		QuestionEntity retrievedQuestion = this.questionService.getQuestionById(id);
+	public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+		Question retrievedQuestion = this.questionService.getQuestionById(id);
 		if (retrievedQuestion == null) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Question>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(retrievedQuestion, HttpStatus.OK);
+		return new ResponseEntity<Question>(retrievedQuestion, HttpStatus.OK);
 	}
 
 	// TODO what if you create a question with a non-existent tag
 	@PostMapping("/createQuestion")
-	public ResponseEntity<QuestionEntity> createQuestion(@Valid @RequestBody QuestionEntity questionEntity,
+	public ResponseEntity<Question> createQuestion(@Valid @RequestBody QuestionView questionView,
 			BindingResult result) {
 		if (result.hasErrors()) {
-			return new ResponseEntity<QuestionEntity>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<Question>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		QuestionEntity createdQuestion = this.questionService.addQuestion(questionEntity);
-		return new ResponseEntity<QuestionEntity>(createdQuestion, HttpStatus.CREATED);
+		Question savedQuestion = this.questionService.addQuestion(questionView);
+		return new ResponseEntity<Question>(savedQuestion, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/updateQuestion")
-	public ResponseEntity<QuestionEntity> updateQuestion(@RequestBody QuestionEntity questionEntity) {
-		QuestionEntity updatedQuestion = this.questionService.updateQuestion(questionEntity);
-		return new ResponseEntity<>(updatedQuestion, HttpStatus.OK);
+	public ResponseEntity<Question> updateQuestion(@RequestBody QuestionView questionview) {
+		Question updatedQuestion = this.questionService.updateQuestion(questionview);
+		return new ResponseEntity<Question>(updatedQuestion, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteQuestion")
-	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionEntity questionEntity) {
-		int deleted = this.questionService.deleteQuestion(questionEntity);
+	public ResponseEntity<HttpStatus> deleteQuestion(@RequestBody QuestionView questionview) {
+		int deleted = this.questionService.deleteQuestion(questionview);
 		if (deleted != 1) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 }

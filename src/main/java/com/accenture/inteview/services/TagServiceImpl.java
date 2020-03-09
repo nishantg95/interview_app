@@ -3,6 +3,7 @@
  */
 package com.accenture.inteview.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.accenture.inteview.entities.TagEntity;
+import com.accenture.inteview.models.Tag;
+import com.accenture.inteview.models.TagView;
 import com.accenture.inteview.repository.TagRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -26,35 +29,46 @@ public class TagServiceImpl implements TagService {
 	private TagRepository tagRepository;
 
 	@Override
+	// TODO weird : what is this annotation doing here
 	@JsonIgnoreProperties(value = "questions")
-	public List<TagEntity> getAllTags() {
-		return this.tagRepository.findAll();
+	public List<Tag> getAllTags() {
+		List<Tag> tags = new ArrayList<>();
+		List<TagEntity> tagEntities = this.tagRepository.findAll();
+		for (Tag tag : tagEntities) {
+			Tag tagView = new TagView(tag);
+			tags.add(tagView);
+		}
+		return tags;
 	}
 
 	@Override
-	public TagEntity getTagById(Long id) {
+	public Tag getTagById(Long id) {
 		Optional<TagEntity> tagOptional = tagRepository.findById(id);
-		return !tagOptional.isPresent() ? null : tagOptional.get();
+		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
 	}
 
 	@Override
-	public TagEntity getTagByName(String name) {
+	public Tag getTagByName(String name) {
 		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
-		return !tagOptional.isPresent() ? null : tagOptional.get();
+		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
 	}
 
 	@Override
-	public TagEntity addTag(TagEntity tagEntity) {
-		return this.tagRepository.save(tagEntity);
+	public Tag addTag(Tag tag) {
+		TagEntity tagEntity = new TagEntity(tag);
+		Tag savedTag = this.tagRepository.save(tagEntity);
+		return new TagView(savedTag);
 	}
 
 //	@Override
-//	public TagEntity updateTag(TagEntity tagEntity) {
-//		return this.tagRepository.save(tagEntity);
+//	public Tag updateTag(TagEntity tagEntity) {
+//	TagEntity tagEntity = new TagEntity(tag);
+//	Tag updatedTag this.tagRepository.save(tagEntity);
+//  return this.tagRepository.save(updatedTag);
 //	}
 
 	@Override
-	public int deleteTag(TagEntity tagEntity) {
-		return this.tagRepository.deleteTagById(tagEntity.getId());
+	public int deleteTag(Tag tag) {
+		return this.tagRepository.deleteTagById(tag.getId());
 	}
 }

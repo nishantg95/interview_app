@@ -10,27 +10,42 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
-/**
- * @author nishant.b.grover
- *
- */
+import org.springframework.beans.BeanUtils;
+
+import com.accenture.inteview.models.Tag;
+
 @Entity
 @Table(name = "TAG")
-//@JsonIgnoreProperties(value = "questions")
-public class TagEntity {
+public class TagEntity implements Tag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotBlank
+	
 	@Column(name = "NAME", nullable = false)
 	private String name;
 
 	@ManyToMany(mappedBy = "tags")
-//	@JsonIgnoreProperties(value = "tags")
 	Set<QuestionEntity> questions;
+	// Set<QuestionEntity> questions = new HashSet<>();
+
+	public TagEntity() {
+	}
+
+	public TagEntity(Tag tag) {
+		BeanUtils.copyProperties(tag, this, Tag.class);
+	}
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param questions
+	 */
+	public TagEntity(String name, Set<QuestionEntity> questions) {
+		this.name = name;
+		this.questions = questions;
+	}
 
 	public Long getId() {
 		return this.id;
@@ -54,25 +69,5 @@ public class TagEntity {
 
 	public void setQuestions(Set<QuestionEntity> questions) {
 		this.questions = questions;
-	}
-
-	@Override
-	public String toString() {
-		return "TagEntity [id=" + this.id + ", name=" + this.name + ", questions=" + this.questions + "]";
-	}
-
-	/**
-	 * @param id
-	 * @param name
-	 * @param questions
-	 */
-	public TagEntity(String name, Set<QuestionEntity> questions) {
-		super();
-
-		this.name = name;
-		this.questions = questions;
-	}
-
-	public TagEntity() {
 	}
 }
