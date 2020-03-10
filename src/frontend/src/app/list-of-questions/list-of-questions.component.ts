@@ -13,6 +13,8 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   @Input() state: string;
   @Input() tag: string;
   questions: Question[] = [];
+  showPreview = true;
+  toggleView = true;
   constructor(
     private questionService: QuestionService,
     private tagService: TagService,
@@ -43,5 +45,20 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
       .subscribe(
         tagResponse => (this.questions = Array.from(tagResponse.questions))
       );
+  }
+
+  compareTagName(a, b) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  }
+
+  routeToEditForm(question: Question) {
+    this.router['editQuestion] = question;
+    this.router.navigateByUrl('/addQuestion')
   }
 }

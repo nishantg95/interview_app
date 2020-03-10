@@ -1,29 +1,104 @@
-<app-navbar>
-</app-navbar>
-<div class="container">
-  {{questions.length}} question<span *ngIf="questions.length > 1 || questions.length === 0">s</span> found
-  <table class="mt-2 table table-bordered table-hover table-secondary .w-auto">
-    <thead>
-      <tr>
-        <th><h4>Questions</h4></th>
-        <th><h4>Added By</h4></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let question of questions.reverse()">
-        <td class="click">
-          <div class="container-fluid" [routerLink]="['/question/', question.id]">
-          <h6>{{ question.title }}</h6>
+<app-navbar> </app-navbar>
+<button
+  class="btn btn-secondary"
+  data-toggle="collapse"
+  data-target=".collapse"
+  aria-expanded="false"
+  (click)="showPreview = !showPreview"
+>
+  Toggle Questions
+</button>
+<button class="btn btn-secondary" (click)="toggleView = !toggleView">
+  Toggle View
+</button>
+<div class="container" id="counter">
+  {{ questions.length }} question<span
+    *ngIf="questions.length > 1 || questions.length === 0"
+    >s</span
+  >
+  found
+  <span *ngIf="this.state === 'tag'"
+    >for the tag(s): <b>{{ this.tag }}</b></span
+  >
+</div>
+<div class="container" *ngIf="toggleView === true">
+  <div class="container pt-1">
+    <div
+      class="mb-4 p-4 bg-light"
+      *ngFor="let question of questions.reverse(); let i = index"
+    >
+      <div id="question_container_{{ i }}" class="click">
+        <div id="question_title_{{ i }}" class="container row">
+          <div class="col-10">
+            <h5>{{ i + 1 }}. {{ question.title }}</h5>
+          </div>
+          <div class="btn-group col-2" id="button_bar">
+            <button id="edit_{{i}}" (click)="routeToEditForm(question)">Edit
+            </button>
+            <button id="delete_{{i}}">Delete
+            </button>
+            <button id="copy_{{i}}">Copy
+            </button>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row pl-3">
+            <span class="mt-2" id="tags_label"
+              >Tags:
+              <span
+                class="mt-2"
+                id="no_tags_label"
+                *ngIf="question.tags.length === 0"
+              >
+                None
+              </span>
+            </span>
+            <app-tags
+              *ngFor="let tag of question.tags.sort(compareTagName)"
+              [tag]="tag"
+              [routerLink]="['/questions/tagged', tag.name]"
+            ></app-tags>
+          </div>
+        </div>
+        <div id="question_body_preview_{{ i }}" class="container">
           {{
             question.body.length > 50
               ? (question.body | slice: 0:50) + "..."
               : question.body
           }}
         </div>
+      </div>
+      <td>{{ question.added_by }}</td>
+    </div>
+  </div>
+</div>
+
+<!-- [routerLink]="['/question/', question.id]" -->
+
+<!-- Table View -->
+<!-- <div class="container" *ngIf="toggleView === true">
+  <table class="mt-2 table table-bordered table-hover table-secondary .w-auto">
+    <tbody>
+      <tr *ngFor="let question of questions.reverse()">
+        <td class="click">
+          <div
+            class="container-fluid"
+            [routerLink]="['/question/', question.id]"
+          >
+            <h6>{{ question.title }}</h6>
+            {{
+              question.body.length > 50
+                ? (question.body | slice: 0:50) + "..."
+                : question.body
+            }}
+          </div>
           <div class="container-fluid">
-            <div class="row pl-3">
-              <app-tags *ngFor="let tag of question.tags" [tag]="tag" [routerLink]="['/questions/tagged', tag.name]"></app-tags>
+            <div class="row mt-2">
+              <app-tags
+                *ngFor="let tag of question.tags.sort(compareTagName)"
+                [tag]="tag"
+                [routerLink]="['/questions/tagged', tag.name]"
+              ></app-tags>
             </div>
           </div>
         </td>
@@ -31,4 +106,61 @@
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->
+
+<!-- Accodian View -->
+<!-- <div class="container" *ngIf="toggleView === false">
+  <div
+    class="container-fluid"
+    *ngFor="let question of questions.reverse(); let i = index"
+  >
+    <div id="accordion_{{ i }}">
+      <div class="card bg-light border-light">
+        <div
+          class="card-header"
+          id="heading_{{ i }}"
+          data-toggle="collapse"
+          [attr.data-target]="'#collapse_' + i"
+          aria-expanded="false"
+          [attr.aria-controls]="'collapse_' + i"
+          (click)="showPreview=!showPreview"
+        >
+          <div class="container-fluid">
+            <h5 class="mb-0">
+              {{i+1}}. {{ question.title }}
+            </h5>
+          </div>
+          <div class="container-fluid">
+            <div class="row pl-3">
+              <span class="mt-2" id="tags_label">Tags:</span>
+              <app-tags
+                *ngFor="let tag of question.tags.sort(compareTagName)"
+                [tag]="tag"
+                [routerLink]="['/questions/tagged', tag.name]"
+              ></app-tags>
+            </div>
+          </div>
+          <div class="container-fluid" *ngIf="this.showPreview">
+            {{
+              question.body.length > 50
+                ? (question.body | slice: 0:50) + "..."
+                : question.body
+            }}<br />
+          </div>
+        </div>
+
+        <div
+          id="collapse_{{ i }}"
+          class="collapse"
+          [attr.aria-labelledby]="'heading_' + i"
+        >
+          <div class="card-body">
+            <div class="container-fluid">
+              {{ question.body }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

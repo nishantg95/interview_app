@@ -1,3 +1,7 @@
 .click {
   cursor: pointer;
 }
+#tags_label{
+  font-size: 9pt;
+  padding-right: 5px;
+}
