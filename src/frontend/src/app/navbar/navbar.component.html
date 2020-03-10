@@ -1,45 +1,32 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a [routerLink]="['/questions']" class="navbar-brand">Home</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark row">
+  <div class="col-3">
+    <a class="navbar-brand" href="#">
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto mt-2 mt-m-0">
-      <button
-      [routerLink]="['/addQuestion']"
-      class="btn btn-primary my-2 mr-sm-4 my-sm-0"
-    >
-      Add Question
-    </button>
-    </ul>
-
+      Home</a>
+  </div>
+  <div class="col-7">
     <form
+      class="form-inline my-2"
       [formGroup]="searchForm"
       autocomplete="off"
-      class="form-inline my-2 my-lg-0"
       id="search_form"
       (ngSubmit)="onSubmit()"
     >
-      <div class="form-group">
+      <div class="input-group col-9">
         <input
-          class="form-control mr-sm-2 has-feedback"
+          class="form-control border-right-0"
           type="search"
           placeholder="Search"
           aria-label="Search"
-          id="search_box"
           formControlName="query"
           (focus)="this.showPrompt = true"
           (blur)="this.showPrompt = false"
         />
+        <span class="input-group-append bg-success border-left-0">
+          <button type="submit" class="input-group-text btn btn-success">
+            <i class="fas fa-search"></i>
+          </button>
+        </span>
         <div class="searchPrompt" *ngIf="this.showPrompt">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
@@ -52,14 +39,12 @@
           including versions of Lorem Ipsum
         </div>
       </div>
-
-      <button
-        class="btn btn-outline-success my-2 my-sm-0"
-        type="submit"
-        id="search_button"
-      >
-        Search
-      </button>
     </form>
+  </div>
+  <div class="col-2">
+    <button class="addQuestion btn btn-primary" [routerLink]="['/addQuestion']">
+      <i class="fas fa-plus"></i>
+      <span>&nbsp;Add Question</span>
+    </button>
   </div>
 </nav>

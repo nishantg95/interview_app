@@ -3,9 +3,9 @@
   border: 1px solid #d4d4d4;
   border-bottom: none;
   border-top: none;
-  max-width: 40%;
+  max-width: 90%;
   z-index: 99;
-  top: 85%;
+  top: 110%;
   overflow-wrap: inherit;
 
   /* left: 0;
@@ -19,4 +19,18 @@
   background-color: DodgerBlue;
   color: #ffffff;
   overflow-wrap: inherit;
+}
+
+
+.addQuestion span {
+  max-width: 0;
+  -webkit-transition: max-width 1s;
+  transition: max-width 1s;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.addQuestion:hover span {
+  max-width: 7rem;
 }
