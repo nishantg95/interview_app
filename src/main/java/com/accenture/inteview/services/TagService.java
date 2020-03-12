@@ -5,7 +5,9 @@ package com.accenture.inteview.services;
 
 import java.util.List;
 
+import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.models.Tag;
+import com.accenture.inteview.models.TagView;
 
 /**
  * @author nishant.b.grover
@@ -24,4 +26,8 @@ public interface TagService {
 //	Tag updateTag(Tag tag);
 
 	int deleteTag(Tag tag);
+
+	TagEntity addTagEntity(TagEntity tagEntity);
+
+	TagView addTagView(Tag tag);
 }

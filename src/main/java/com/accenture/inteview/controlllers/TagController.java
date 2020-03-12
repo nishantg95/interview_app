@@ -1,6 +1,9 @@
 package com.accenture.inteview.controlllers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -72,6 +75,8 @@ public class TagController {
 		if (result.hasErrors()) {
 			return new ResponseEntity<Tag>(HttpStatus.NOT_ACCEPTABLE);
 		}
+		// TODO How do we guarantee that every tag has a unique name.
+		// the set does not guarantee that.
 		Tag retrievedTag = tagService.getTagByName(tagview.getName());
 		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagview.getName())) {
 			return new ResponseEntity<Tag>(HttpStatus.IM_USED);
@@ -80,11 +85,26 @@ public class TagController {
 		return new ResponseEntity<>(savedTag, HttpStatus.CREATED);
 	}
 
+	@PostMapping("/createTags")
+	public ResponseEntity<Collection<TagView>> createTags(@Valid @RequestBody Collection<TagView> tags, BindingResult result) {
+		if (result.hasErrors()) {
+			return new ResponseEntity<Collection<TagView>>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		Collection<TagView> tagsToCreate = tags.stream().filter(tag -> tag.getId() == null)
+				.collect(Collectors.toCollection(ArrayList::new));
+		Collection<TagView> createdTags = tagsToCreate.stream().map(tag -> this.tagService.addTagView(tag))
+				.collect(Collectors.toCollection(ArrayList::new));
+		tags.removeIf(tag -> tag.getId() == null);
+		
+		tags.addAll(createdTags);
+		return new ResponseEntity<Collection<TagView>>(tags, HttpStatus.CREATED);
+	}
+ 
+
 //	@PutMapping("/updateTag")
 //	public ResponseEntity<Tag> updateTag(@RequestBody TagView tagview) {
 //		Tag updatedTag = this.tagService.updateTag(tagview);
 //		return new ResponseEntity<Tag>(updatedTag, HttpStatus.OK);
-//	}
 
 	@DeleteMapping("/deleteTag")
 	public ResponseEntity<HttpStatus> deleteTag(@RequestBody TagView tagView) {

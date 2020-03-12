@@ -80,6 +80,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public Question addQuestion(Question question) {
+		System.out.println("Inside addQuestion serviceImpl question.getTags() = " + question.getTags());
 		QuestionEntity questionEntity = new QuestionEntity(question);
 		Question savedQuestion = questionRepository.save(questionEntity);
 		return new QuestionView(savedQuestion);

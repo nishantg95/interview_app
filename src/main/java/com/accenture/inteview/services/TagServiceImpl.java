@@ -59,6 +59,18 @@ public class TagServiceImpl implements TagService {
 		Tag savedTag = this.tagRepository.save(tagEntity);
 		return new TagView(savedTag);
 	}
+	
+	@Override
+	public TagView addTagView(Tag tag) {
+		TagEntity tagEntity = new TagEntity(tag);
+		Tag savedTag = this.tagRepository.save(tagEntity);
+		return new TagView(savedTag);
+	}
+
+	@Override
+	public TagEntity addTagEntity(TagEntity tagEntity) {
+		return this.tagRepository.save(tagEntity);
+	}
 
 //	@Override
 //	public Tag updateTag(TagEntity tagEntity) {
