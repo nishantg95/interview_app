@@ -3,19 +3,21 @@ package com.accenture.inteview.services;
 import java.util.List;
 import java.util.Set;
 
-import com.accenture.inteview.entities.QuestionEntity;
+import com.accenture.inteview.models.Question;
 
 public interface QuestionService {
 
-	List<QuestionEntity> getAllQuestions();
+	List<Question> getAllQuestions();
 
-	Set<QuestionEntity> getQuestionsByTagName(String tag);
+	Set<Question> getQuestionsByTagsNames(String[] tagsNames);
 
-	QuestionEntity getQuestionById(Long id);
+	Set<Question> getQuestionsByTagName(String tag);
 
-	QuestionEntity addQuestion(QuestionEntity questionEntity);
+	Question getQuestionById(Long id);
 
-	QuestionEntity updateQuestion(QuestionEntity questionEntity);
+	Question addQuestion(Question question);
 
-	int deleteQuestion(QuestionEntity questionEntity);
+	Question updateQuestion(Question question);
+
+	int deleteQuestion(Question question);
 }
