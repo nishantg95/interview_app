@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Question } from '../interfaces/question';
+import { Tag } from '../interfaces/tag';
 import { QuestionService } from '../question.service';
 import { TagService } from '../tag.service';
 import { Router } from '@angular/router';
@@ -15,6 +16,7 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   questions: Question[] = [];
   showPreview = true;
   toggleView = true;
+  key = 'editQuestion';
   constructor(
     private questionService: QuestionService,
     private tagService: TagService,
@@ -47,7 +49,7 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
       );
   }
 
-  compareTagName(a, b) {
+  compareTagName(a: Tag, b: Tag) {
     if (a.name < b.name) {
       return -1;
     }
@@ -58,7 +60,7 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   }
 
   routeToEditForm(question: Question) {
-    this.router['editQuestion] = question;
-    this.router.navigateByUrl('/addQuestion')
+    this.router[this.key] = question;
+    this.router.navigateByUrl('/editQuestion');
   }
 }

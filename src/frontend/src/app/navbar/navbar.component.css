@@ -26,7 +26,7 @@
   max-width: 0;
   -webkit-transition: max-width 1s;
   transition: max-width 1s;
-  display: inline-block;
+  display: inline-flex;
   vertical-align: top;
   white-space: nowrap;
   overflow: hidden;
