@@ -49,11 +49,11 @@ export class QuestionFormComponent implements OnInit {
     } else {
       this.router.navigateByUrl('/questions');
     }
+
   }
 
   onSubmit() {
     const ques: Question = this.questionForm.value;
-    // this.patchTagsInput(ques);
     console.log(ques);
     this.tagService.addTags(ques.tags).subscribe( updatedTags => {
       ques.tags = updatedTags;
@@ -68,17 +68,6 @@ export class QuestionFormComponent implements OnInit {
 
     this.router[this.key] = undefined;
     this.router.navigateByUrl('/questions');
-  }
-
-  patchTagsInput(question: Question) {
-    let tagToBeAdded: Tag;
-    question.tags.forEach((tag, index) => {
-      if (tag.id === undefined) {
-        tagToBeAdded = { id: null, name: tag.name, questions: null };
-        question.tags.splice(index, 1);
-        question.tags.push(tagToBeAdded);
-      }
-    });
   }
 
   @HostListener('window:beforeunload', ['$event'])

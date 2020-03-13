@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+**/hibernate_indexes
 ### STS ###
 .apt_generated
 .classpath

@@ -2,7 +2,6 @@ package com.accenture.inteview.controlllers;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -23,12 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.models.Question;
 import com.accenture.inteview.models.QuestionView;
-import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.services.QuestionService;
-import com.accenture.inteview.services.TagService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
@@ -37,9 +33,6 @@ public class QuestionController {
 
 	@Autowired
 	QuestionService questionService;
-
-	@Autowired
-	private TagService tagService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -83,7 +76,6 @@ public class QuestionController {
 		return new ResponseEntity<Question>(retrievedQuestion, HttpStatus.OK);
 	}
 
-	// TODO what if you create a question with a non-existent tag
 	@PostMapping("/createQuestion")
 	public ResponseEntity<Question> createQuestion(@Valid @RequestBody QuestionView questionView,
 			BindingResult result) {
@@ -108,21 +100,5 @@ public class QuestionController {
 			return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-	}
-
-	@SuppressWarnings("unused")
-	private Set<Tag> createNonexistentTags(QuestionView questionView) {
-		Set<TagEntity> tags = questionView.getTags();
-		// collect nonexistent tags from questions
-		Stream<TagEntity> nonexistentTags = tags.stream().filter(tag -> (tag.getId() == null));
-
-		// save nonexistent tags to database
-
-		// remove nonexistent tags from questions;
-		// nonexistentTags.map(tag -> tagService.addTagEntity(tag)).map(tag -> tag.);
-		// collect(Collectors.toSet(HashSet::new));
-
-		// add saved tags to questions;
-		return null;
 	}
 }

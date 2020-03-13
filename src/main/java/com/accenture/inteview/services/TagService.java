@@ -29,5 +29,5 @@ public interface TagService {
 
 	TagEntity addTagEntity(TagEntity tagEntity);
 
-	TagView addTagView(Tag tag);
+	List<TagView> addTags(List<TagView> tagViews);
 }

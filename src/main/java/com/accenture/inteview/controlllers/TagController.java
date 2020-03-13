@@ -1,9 +1,6 @@
 package com.accenture.inteview.controlllers;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -71,35 +68,32 @@ public class TagController {
 	}
 
 	@PostMapping("/createTag")
-	public ResponseEntity<Tag> createTag(@Valid @RequestBody TagView tagview, BindingResult result) {
+	public ResponseEntity<Tag> createTag(@Valid @RequestBody TagView tagView, BindingResult result) {
 		if (result.hasErrors()) {
 			return new ResponseEntity<Tag>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		// TODO How do we guarantee that every tag has a unique name.
-		// the set does not guarantee that.
-		Tag retrievedTag = tagService.getTagByName(tagview.getName());
-		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagview.getName())) {
+		Tag retrievedTag = tagService.getTagByName(tagView.getName());
+		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
 			return new ResponseEntity<Tag>(HttpStatus.IM_USED);
 		}
-		Tag savedTag = this.tagService.addTag(tagview);
+		Tag savedTag = this.tagService.addTag(tagView);
 		return new ResponseEntity<>(savedTag, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/createTags")
-	public ResponseEntity<Collection<TagView>> createTags(@Valid @RequestBody Collection<TagView> tags, BindingResult result) {
+	public ResponseEntity<List<TagView>> createTags(@Valid @RequestBody List<TagView> tagViews, BindingResult result) {
 		if (result.hasErrors()) {
-			return new ResponseEntity<Collection<TagView>>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<List<TagView>>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		Collection<TagView> tagsToCreate = tags.stream().filter(tag -> tag.getId() == null)
-				.collect(Collectors.toCollection(ArrayList::new));
-		Collection<TagView> createdTags = tagsToCreate.stream().map(tag -> this.tagService.addTagView(tag))
-				.collect(Collectors.toCollection(ArrayList::new));
-		tags.removeIf(tag -> tag.getId() == null);
-		
-		tags.addAll(createdTags);
-		return new ResponseEntity<Collection<TagView>>(tags, HttpStatus.CREATED);
+		for (TagView tagView : tagViews) {
+			Tag retrievedTag = tagService.getTagByName(tagView.getName());
+			if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
+				return new ResponseEntity<List<TagView>>(HttpStatus.IM_USED);
+			}
+		}
+		List<TagView> retrievedTags = tagService.addTags(tagViews);
+		return new ResponseEntity<List<TagView>>(retrievedTags, HttpStatus.CREATED);
 	}
- 
 
 //	@PutMapping("/updateTag")
 //	public ResponseEntity<Tag> updateTag(@RequestBody TagView tagview) {

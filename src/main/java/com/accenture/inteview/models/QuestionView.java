@@ -6,10 +6,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.BeanUtils;
 
-import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.util.ToLowerCaseDeserializer;
 import com.accenture.inteview.util.ToLowerCaseSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -30,9 +28,7 @@ public class QuestionView implements Question {
 	@JsonDeserialize(using = ToLowerCaseDeserializer.class)
 	private String added_by;
 
-	@JsonIgnoreProperties(value = "questions")
-	// TODO may need to create implementation
-	Set<TagEntity> tags;
+	Set<TagView> tags;
 
 	public QuestionView() {
 
@@ -82,12 +78,13 @@ public class QuestionView implements Question {
 		this.added_by = added_by;
 	}
 
-	public Set<TagEntity> getTags() {
+	public Set<TagView> getTags() {
 		return this.tags;
 	}
 
-	public void setTags(Set<TagEntity> tags) {
-		this.tags = tags;
+	@SuppressWarnings("unchecked")
+	public void setTags(Set<? extends Tag> tags) {
+		this.tags = (Set<TagView>) tags;
 	}
 
 	@Override

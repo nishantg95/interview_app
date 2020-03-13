@@ -13,10 +13,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.springframework.beans.BeanUtils;
 
 import com.accenture.inteview.models.Question;
+import com.accenture.inteview.models.Tag;
 
+@Indexed
 @Entity
 @Table(name = "QUESTION")
 public class QuestionEntity implements Question {
@@ -24,8 +29,12 @@ public class QuestionEntity implements Question {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Field
 	@Column(name = "TITLE", nullable = false)
 	private String title;
+
+	@Field
 	@NotBlank
 	@Column(name = "BODY", nullable = false)
 	private String body;
@@ -36,13 +45,12 @@ public class QuestionEntity implements Question {
 	@Column(name = "ADDED_BY", nullable = true)
 	private String added_by;
 
+	@IndexedEmbedded
 	@ManyToMany
 	@JoinTable(name = "QUESTIONS_WITH_TAGS", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	Set<TagEntity> tags;
-	// Set<TagEntity> tags = new HashSet<>();
 
 	public QuestionEntity() {
-
 	}
 
 	public QuestionEntity(Question question) {
@@ -105,7 +113,9 @@ public class QuestionEntity implements Question {
 		return this.tags;
 	}
 
-	public void setTags(Set<TagEntity> tags) {
-		this.tags = tags;
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setTags(Set<? extends Tag> tags) {
+		this.tags = (Set<TagEntity>) tags;
 	}
 }
