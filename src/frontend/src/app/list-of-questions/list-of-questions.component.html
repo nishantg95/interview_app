@@ -55,13 +55,13 @@
                 <span
                   class="mt-2"
                   id="no_tags_label"
-                  *ngIf="question.tags.length === 0"
+                  *ngIf="question.tags?.length === 0"
                 >
                   None
                 </span>
               </span>
               <app-tags
-                *ngFor="let tag of question.tags.sort(compareTagName)"
+                *ngFor="let tag of question.tags?.sort(compareTagName)"
                 [tag]="tag"
                 [routerLink]="['/questions/tagged', tag.name]"
               ></app-tags>

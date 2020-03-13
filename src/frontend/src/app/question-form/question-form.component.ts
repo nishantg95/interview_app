@@ -16,7 +16,6 @@ import { TagContentType } from '@angular/compiler';
   styleUrls: ['./question-form.component.css']
 })
 export class QuestionFormComponent implements OnInit {
-
   constructor(
     private questionService: QuestionService,
     private fb: FormBuilder,
@@ -52,22 +51,26 @@ export class QuestionFormComponent implements OnInit {
     }
   }
 
-onSubmit() {
+  onSubmit() {
     const ques: Question = this.questionForm.value;
-    this.patchTagsInput(ques);
+    // this.patchTagsInput(ques);
     console.log(ques);
-    if (ques.id === null) {
-      this.questionService.addQuestion(ques);
-    } else {
-      if (ques !== this.data) {
-        this.questionService.updateQuestion(ques);
+    this.tagService.addTags(ques.tags).subscribe( updatedTags => {
+      ques.tags = updatedTags;
+      if (ques.id === null) {
+        this.questionService.addQuestion(ques).subscribe();
+      } else {
+        if (ques !== this.data) {
+          this.questionService.updateQuestion(ques).subscribe();
+        }
       }
-    }
+    });
+
     this.router[this.key] = undefined;
     this.router.navigateByUrl('/questions');
   }
 
-patchTagsInput(question: Question) {
+  patchTagsInput(question: Question) {
     let tagToBeAdded: Tag;
     question.tags.forEach((tag, index) => {
       if (tag.id === undefined) {
