@@ -53,29 +53,38 @@
           />
         </div>
         <div class="form-group">
-          <ng-select class = "custom"
+          <ng-select
+            class="custom"
             [items]="setOfTags | async"
             [multiple]="true"
             [closeOnSelect]="false"
+            [clearSearchOnAdd]="true"
             [hideSelected]="true"
             bindLabel="name"
             placeholder="Select Tags"
             formControlName="tags"
-            [addTag]= "true"
+            [addTag]="true"
+            addTagText="Create custom tag:"
           >
-          <!-- <ng-template ng-option-tmp let-index="index">Add this tag</ng-template>
-          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-            <input id="item-{{index}}" type="checkbox" /> {{item.name}}
-        </ng-template> -->
+          <ng-template class="tag bg-info" ng-label-tmp let-item="item" let-clear="clear">
+            <span class="tags border border-info bg-info text-white">{{item.name}}&nbsp;&nbsp;
+              <span class="click" (click)="clear(item)" aria-hidden="true">×</span>
+            </span>
+
+        </ng-template>
+
           </ng-select>
         </div>
         <div class="text-center">
-          <button type="submit" [disabled]="!questionForm.valid" >Submit</button>
+          <button type="submit" [disabled]="!questionForm.valid">Submit</button>
         </div>
         <div>{{ questionForm.valid }}</div>
         <div>{{ questionForm.value | json }}</div>
-        <div>{{ questionForm.status }}</div>
+        <div>{{ questionForm.touched }}</div>
       </form>
+    </div>
+    <div>
+      {{ data | json }}
     </div>
   </div>
 </div>

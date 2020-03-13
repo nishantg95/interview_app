@@ -49,6 +49,7 @@ export class QuestionFormComponent implements OnInit {
     } else {
       this.router.navigateByUrl('/questions');
     }
+
   }
 
   onSubmit() {
@@ -68,7 +69,6 @@ export class QuestionFormComponent implements OnInit {
     this.router[this.key] = undefined;
     this.router.navigateByUrl('/questions');
   }
-
 
   @HostListener('window:beforeunload', ['$event'])
   @HostListener('window:popstate', ['$event'])

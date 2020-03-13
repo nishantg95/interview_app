@@ -1,1 +1,13 @@
-
+.tags {
+  width:fit-content;
+  height:fit-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+  font-size: 10pt;
+  transition: 0.4s;
+}
+.click {
+  cursor: pointer;
+}

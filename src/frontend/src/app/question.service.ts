@@ -67,9 +67,9 @@ export class QuestionService {
     return response;
   }
 
-  updateQuestion(question: Question) {
+  updateQuestion(question: Question): Observable<{}> {
     const response = this.http
-      .put(endpoint + 'INSERT STRING HERE', question, httpOptions)
+      .put(endpoint + '/updateQuestion', question, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Question>('updateQuestion'))

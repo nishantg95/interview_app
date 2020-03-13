@@ -58,12 +58,12 @@ export class TagService {
     return response;
   }
 
-  addTag(tag: Tag): Observable<Tag> {
+  addTags(tags: Tag[]): Observable<Tag[]> {
     const response = this.http
-      .post<Tag>(endpoint + '/createTag', tag, httpOptions)
+      .post<Tag[]>(endpoint + '/createTags', tags, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
-        catchError(this.handleError<Tag>('addTag'))
+        catchError(this.handleError<Tag[]>('addTags'))
       );
     console.log('Adding Tag');
     // console.log('Response', response);

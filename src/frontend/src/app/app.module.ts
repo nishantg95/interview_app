@@ -14,6 +14,8 @@ import { ListOfQuestionsComponent } from './list-of-questions/list-of-questions.
 import { QuestionViewComponent } from './question-view/question-view.component';
 import { QuestionsByTagNameComponent } from './questions-by-tag-name/questions-by-tag-name.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { NavbarComponent } from './navbar/navbar.component';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ListOfQuestionsComponent,
     QuestionViewComponent,
     QuestionsByTagNameComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
