@@ -6,6 +6,7 @@ package com.accenture.inteview.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.models.TagView;
 import com.accenture.inteview.repository.TagRepository;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * @author nishant.b.grover
@@ -29,8 +29,6 @@ public class TagServiceImpl implements TagService {
 	private TagRepository tagRepository;
 
 	@Override
-	// TODO weird : what is this annotation doing here
-	@JsonIgnoreProperties(value = "questions")
 	public List<Tag> getAllTags() {
 		List<Tag> tags = new ArrayList<>();
 		List<TagEntity> tagEntities = this.tagRepository.findAll();
@@ -59,12 +57,15 @@ public class TagServiceImpl implements TagService {
 		Tag savedTag = this.tagRepository.save(tagEntity);
 		return new TagView(savedTag);
 	}
-	
+
 	@Override
-	public TagView addTagView(Tag tag) {
-		TagEntity tagEntity = new TagEntity(tag);
-		Tag savedTag = this.tagRepository.save(tagEntity);
-		return new TagView(savedTag);
+	public List<TagView> addTags(List<TagView> tagViews) {
+		List<Tag> tagsToCreate = tagViews.stream().filter(tag -> tag.getId() == null).collect(Collectors.toList());
+		List<TagView> createdTags = tagsToCreate.stream().map(tag -> addTag(tag)).map(tag -> new TagView(tag))
+				.collect(Collectors.toList());
+		tagViews.removeIf(tag -> tag.getId() == null);
+		tagViews.addAll(createdTags);
+		return tagViews;
 	}
 
 	@Override

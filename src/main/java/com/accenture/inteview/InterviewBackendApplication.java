@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
+import com.accenture.inteview.configuration.HibernateSearchConfig;
 import com.accenture.inteview.services.QuestionService;
 import com.accenture.inteview.services.TagService;
 
 @SpringBootApplication
+@Import(HibernateSearchConfig.class)
 public class InterviewBackendApplication implements CommandLineRunner {
 
 	@Autowired

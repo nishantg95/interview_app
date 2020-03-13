@@ -2,8 +2,6 @@ package com.accenture.inteview.models;
 
 import java.util.Set;
 
-import com.accenture.inteview.entities.QuestionEntity;
-
 public interface Tag {
 
 	Long getId();
@@ -14,7 +12,7 @@ public interface Tag {
 
 	void setName(String name);
 
-	Set<QuestionEntity> getQuestions();
+	Set<? extends Question> getQuestions();
 
-	void setQuestions(Set<QuestionEntity> questions);
+	void setQuestions(Set<? extends Question> questions);
 }
