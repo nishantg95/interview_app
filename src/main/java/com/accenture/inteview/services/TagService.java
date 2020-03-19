@@ -5,8 +5,6 @@ package com.accenture.inteview.services;
 
 import java.util.List;
 
-import com.accenture.inteview.entities.TagEntity;
-import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.models.TagView;
 
 /**
@@ -15,19 +13,16 @@ import com.accenture.inteview.models.TagView;
  */
 public interface TagService {
 
-	List<Tag> getAllTags();
+	List<TagView> getAllTags();
 
-	Tag getTagById(Long id);
+	TagView getTagById(Long id);
 
-	Tag getTagByName(String name);
+	TagView getTagByName(String name);
 
-	Tag addTag(Tag tag);
+	List<TagView> saveTagList(List<TagView> tagViews);
 
-//	Tag updateTag(Tag tag);
+	TagView saveTag(TagView tagView);
 
-	int deleteTag(Tag tag);
+	int deleteTag(TagView tagView);
 
-	TagEntity addTagEntity(TagEntity tagEntity);
-
-	List<TagView> addTags(List<TagView> tagViews);
 }

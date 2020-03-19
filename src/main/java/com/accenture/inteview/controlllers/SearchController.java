@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accenture.inteview.models.Question;
+import com.accenture.inteview.models.QuestionView;
 import com.accenture.inteview.services.HibernateSearchService;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -33,23 +33,23 @@ public class SearchController {
 	private HibernateSearchService searchService;
 
 	@GetMapping("/searchQuestions/tags")
-	public ResponseEntity<Set<Question>> searchQuestionsByTags(@RequestBody String[] tagsNames) {
+	public ResponseEntity<Set<QuestionView>> searchQuestionsByTags(@RequestBody String[] tagsNames) {
 
-		Set<Question> questions = this.searchService.getQuestionsByTagsNames(tagsNames);
-		if (questions == null) {
-			return new ResponseEntity<Set<Question>>(HttpStatus.NO_CONTENT);
+		Set<QuestionView> questionViews = this.searchService.getQuestionsByTagsNames(tagsNames);
+		if (questionViews.isEmpty()) {
+			return new ResponseEntity<Set<QuestionView>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Set<Question>>(questions, HttpStatus.OK);
+		return new ResponseEntity<Set<QuestionView>>(questionViews, HttpStatus.OK);
 	}
 
 	@GetMapping("/searchQuestions/keyword")
-	public ResponseEntity<Set<Question>> searchQuestionsBykeyword(@RequestParam String keyword) {
+	public ResponseEntity<Set<QuestionView>> searchQuestionsBykeyword(@RequestParam String keyword) {
 		System.out.println(" controller searchQuestionsBykeyword. Keyword= " + keyword);
 
-		Set<Question> questions = this.searchService.searchTitleAndBodyByKeyword(keyword);
-		if (questions == null) {
-			return new ResponseEntity<Set<Question>>(HttpStatus.NO_CONTENT);
+		Set<QuestionView> questionViews = this.searchService.searchTitleAndBodyByKeyword(keyword);
+		if (questionViews.isEmpty()) {
+			return new ResponseEntity<Set<QuestionView>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Set<Question>>(questions, HttpStatus.OK);
+		return new ResponseEntity<Set<QuestionView>>(questionViews, HttpStatus.OK);
 	}
 }

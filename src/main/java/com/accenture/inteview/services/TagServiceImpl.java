@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.accenture.inteview.entities.TagEntity;
-import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.models.TagView;
 import com.accenture.inteview.repository.TagRepository;
 
@@ -29,59 +28,43 @@ public class TagServiceImpl implements TagService {
 	private TagRepository tagRepository;
 
 	@Override
-	public List<Tag> getAllTags() {
-		List<Tag> tags = new ArrayList<>();
-		List<TagEntity> tagEntities = this.tagRepository.findAll();
-		for (Tag tag : tagEntities) {
-			Tag tagView = new TagView(tag);
-			tags.add(tagView);
-		}
-		return tags;
+	public List<TagView> getAllTags() {
+		List<TagView> tagViews = new ArrayList<>();
+		this.tagRepository.findAll().stream().map(tagEntity -> tagViews.add(new TagView(tagEntity)));
+		return tagViews;
 	}
 
 	@Override
-	public Tag getTagById(Long id) {
+	public TagView getTagById(Long id) {
 		Optional<TagEntity> tagOptional = tagRepository.findById(id);
 		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
 	}
 
 	@Override
-	public Tag getTagByName(String name) {
+	public TagView getTagByName(String name) {
 		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
 		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
 	}
 
 	@Override
-	public Tag addTag(Tag tag) {
-		TagEntity tagEntity = new TagEntity(tag);
-		Tag savedTag = this.tagRepository.save(tagEntity);
+	public TagView saveTag(TagView tagView) {
+		TagEntity tagEntity = new TagEntity(tagView);
+		TagEntity savedTag = this.tagRepository.save(tagEntity);
 		return new TagView(savedTag);
 	}
 
 	@Override
-	public List<TagView> addTags(List<TagView> tagViews) {
-		List<Tag> tagsToCreate = tagViews.stream().filter(tag -> tag.getId() == null).collect(Collectors.toList());
-		List<TagView> createdTags = tagsToCreate.stream().map(tag -> addTag(tag)).map(tag -> new TagView(tag))
+	public List<TagView> saveTagList(List<TagView> tagViews) {
+		List<TagView> tagsToCreate = tagViews.stream().filter(tagView -> tagView.getId() == null)
 				.collect(Collectors.toList());
-		tagViews.removeIf(tag -> tag.getId() == null);
-		tagViews.addAll(createdTags);
+		// remove pre-existent tags to create so that they can be replaced
+		tagViews.removeAll(tagsToCreate);
+		tagsToCreate.stream().map(tagView -> saveTag(tagView)).forEach(tagView -> tagViews.add(tagView));
 		return tagViews;
 	}
 
 	@Override
-	public TagEntity addTagEntity(TagEntity tagEntity) {
-		return this.tagRepository.save(tagEntity);
-	}
-
-//	@Override
-//	public Tag updateTag(TagEntity tagEntity) {
-//	TagEntity tagEntity = new TagEntity(tag);
-//	Tag updatedTag this.tagRepository.save(tagEntity);
-//  return this.tagRepository.save(updatedTag);
-//	}
-
-	@Override
-	public int deleteTag(Tag tag) {
-		return this.tagRepository.deleteTagById(tag.getId());
+	public int deleteTag(TagView tagView) {
+		return this.tagRepository.deleteTagById(tagView.getId());
 	}
 }
