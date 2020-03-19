@@ -1,6 +1,4 @@
-/**
- *
- */
+
 package com.accenture.inteview.services;
 
 import java.util.ArrayList;
