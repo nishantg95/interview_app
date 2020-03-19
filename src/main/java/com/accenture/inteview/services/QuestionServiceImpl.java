@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.entities.TagEntity;
-import com.accenture.inteview.models.Question;
 import com.accenture.inteview.models.QuestionView;
-import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.repository.QuestionRepository;
 import com.accenture.inteview.repository.TagRepository;
 
@@ -29,72 +27,63 @@ public class QuestionServiceImpl implements QuestionService {
 	TagRepository tagRepository;
 
 	@Override
-	public List<Question> getAllQuestions() {
-		List<Question> questions = new ArrayList<>();
+	public List<QuestionView> getAllQuestions() {
+		List<QuestionView> questionViews = new ArrayList<>();
 		List<QuestionEntity> questionEntities = questionRepository.findAll();
-		for (Question question : questionEntities) {
-			Question questionView = new QuestionView(question);
-			questions.add(questionView);
-		}
-		return questions;
+		questionEntities.stream().forEach(question -> questionViews.add(new QuestionView(question)));
+		return questionViews;
 	}
 
 	@Override
-	public Set<Question> getQuestionsByTagsNames(String[] tagsNames) {
-		Set<Question> questionEntities = new HashSet<>();
-		Set<Question> questionViews = new HashSet<>();
+	public Set<QuestionView> getQuestionsByTagNameList(String[] tagsNames) {
+		Set<QuestionEntity> questionEntities = new HashSet<>();
+		Set<QuestionView> questionViews = new HashSet<>();
 		for (String tagName : tagsNames) {
 			Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(tagName);
 			if (tagOptional.isPresent()) {
-				Tag tag = tagOptional.get();
-				questionEntities.addAll(tag.getQuestions());
+				TagEntity tagEntity = tagOptional.get();
+				questionEntities.addAll(tagEntity.getQuestions());
 			}
 		}
-		for (Question question : questionEntities) {
-			Question questionView = new QuestionView(question);
-			questionViews.add(questionView);
-		}
-		return questionViews.isEmpty() ? null : questionViews;
+		questionEntities.stream().forEach(question -> questionViews.add(new QuestionView(question)));
+		return questionViews;
 	}
 
 	@Override
-	public Set<Question> getQuestionsByTagName(String tagName) {
+	public Set<QuestionView> getQuestionsByTagName(String tagName) {
 		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(tagName);
 		Set<QuestionEntity> questionEntities = new HashSet<>();
-		Set<Question> questionViews = new HashSet<>();
+		Set<QuestionView> questionViews = new HashSet<>();
 		if (tagOptional.isPresent()) {
 			questionEntities = tagOptional.get().getQuestions();
-			for (Question question : questionEntities) {
-				Question questionView = new QuestionView(question);
-				questionViews.add(questionView);
-			}
+			questionEntities.stream().forEach(question -> questionViews.add(new QuestionView(question)));
 		}
-		return questionViews.isEmpty() ? null : questionViews;
+		return questionViews;
 	}
 
 	@Override
-	public Question getQuestionById(Long id) {
+	public QuestionView getQuestionById(Long id) {
 		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
 		return !questionOptional.isPresent() ? null : new QuestionView(questionOptional.get());
 	}
 
 	@Override
-	public Question addQuestion(Question question) {
-		System.out.println("Inside addQuestion serviceImpl question.getTags() = " + question.getTags());
-		QuestionEntity questionEntity = new QuestionEntity(question);
-		Question savedQuestion = questionRepository.save(questionEntity);
+	public QuestionView saveQuestion(QuestionView questionView) {
+		QuestionEntity questionEntity = new QuestionEntity(questionView);
+		QuestionEntity savedQuestion = questionRepository.save(questionEntity);
 		return new QuestionView(savedQuestion);
 	}
 
 	@Override
-	public Question updateQuestion(Question question) {
-		QuestionEntity questionEntity = new QuestionEntity(question);
-		Question updatedQuestion = questionRepository.save(questionEntity);
+	public QuestionView updateQuestion(QuestionView questionView) {
+		QuestionEntity questionEntity = new QuestionEntity(questionView);
+		QuestionEntity updatedQuestion = questionRepository.save(questionEntity);
 		return new QuestionView(updatedQuestion);
+
 	}
 
 	@Override
-	public int deleteQuestion(Question question) {
-		return questionRepository.deleteQuestionById(question.getId());
+	public int deleteQuestion(QuestionView questionView) {
+		return questionRepository.deleteQuestionById(questionView.getId());
 	}
 }
