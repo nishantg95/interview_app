@@ -1,6 +1,7 @@
 package com.accenture.inteview.controlllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -52,7 +53,7 @@ public class TagController {
 	public ResponseEntity<TagView> getTagById(@PathVariable Long id) {
 
 		TagView retrievedTag = tagService.getTagById(id);
-		if (retrievedTag == null) {
+		if (retrievedTag == TagView.NotFound) {
 			return new ResponseEntity<TagView>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<TagView>(retrievedTag, HttpStatus.OK);
@@ -61,7 +62,7 @@ public class TagController {
 	@GetMapping("/getTag/name/{name}")
 	public ResponseEntity<TagView> getTagByName(@PathVariable String name) {
 		TagView retrievedTag = tagService.getTagByName(name);
-		if (retrievedTag == null) {
+		if (retrievedTag == TagView.NotFound) {
 			return new ResponseEntity<TagView>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<TagView>(retrievedTag, HttpStatus.OK);
@@ -73,26 +74,32 @@ public class TagController {
 			return new ResponseEntity<TagView>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		TagView retrievedTag = tagService.getTagByName(tagView.getName());
-		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
+		if (retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
 			return new ResponseEntity<TagView>(HttpStatus.IM_USED);
 		}
 		TagView savedTag = this.tagService.saveTag(tagView);
 		return new ResponseEntity<>(savedTag, HttpStatus.CREATED);
 	}
 
-	@PostMapping("/createTags")
+	@PostMapping("/createTagList")
 	public ResponseEntity<List<TagView>> saveTagList(@Valid @RequestBody List<TagView> tagViews, BindingResult result) {
 		if (result.hasErrors()) {
 			return new ResponseEntity<List<TagView>>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		for (TagView tagView : tagViews) {
+		List<TagView> tagViewsToSave = tagViews.stream().filter(tagView -> tagView.getId() == null)
+				.collect(Collectors.toList());
+		// remove from the list tags that need to be saved so they be replaced with
+		// created ones
+		tagViews.removeAll(tagViewsToSave);
+		for (TagView tagView : tagViewsToSave) {
 			TagView retrievedTag = tagService.getTagByName(tagView.getName());
-			if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
+			if (retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
 				return new ResponseEntity<List<TagView>>(HttpStatus.IM_USED);
 			}
 		}
-		List<TagView> retrievedTags = tagService.saveTagList(tagViews);
-		return new ResponseEntity<List<TagView>>(retrievedTags, HttpStatus.CREATED);
+		List<TagView> savedTags = tagService.saveTagList(tagViewsToSave);
+		tagViews.addAll(savedTags);
+		return new ResponseEntity<List<TagView>>(tagViews, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/deleteTag")

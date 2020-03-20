@@ -1,5 +1,6 @@
 package com.accenture.inteview.models;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class QuestionView {
+
+	public static QuestionView NotFound = new QuestionView(new Long(0), "Question Not Found", Collections.emptySet());
 
 	private Long id;
 
@@ -46,6 +49,12 @@ public class QuestionView {
 			tagViews.add(new TagView(tagEntity));
 		}
 		this.tags = tagViews;
+	}
+
+	public QuestionView(Long id, String title, Set<TagView> tags) {
+		this.id = id;
+		this.title = title;
+		this.tags = tags;
 	}
 
 	public Long getId() {

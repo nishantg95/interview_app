@@ -69,7 +69,7 @@ public class QuestionController {
 	@GetMapping("/getQuestion/{id}")
 	public ResponseEntity<QuestionView> getQuestionById(@PathVariable Long id) {
 		QuestionView retrievedQuestion = this.questionService.getQuestionById(id);
-		if (retrievedQuestion == null) {
+		if (retrievedQuestion == QuestionView.NotFound) {
 			return new ResponseEntity<QuestionView>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<QuestionView>(retrievedQuestion, HttpStatus.OK);

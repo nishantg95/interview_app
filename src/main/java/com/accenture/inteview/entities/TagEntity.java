@@ -67,5 +67,4 @@ public class TagEntity {
 	public TagEntity(TagView tagView) {
 		BeanUtils.copyProperties(tagView, this);
 	}
-
 }

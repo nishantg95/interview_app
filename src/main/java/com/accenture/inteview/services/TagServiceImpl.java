@@ -28,20 +28,20 @@ public class TagServiceImpl implements TagService {
 	@Override
 	public List<TagView> getAllTags() {
 		List<TagView> tagViews = new ArrayList<>();
-		this.tagRepository.findAll().stream().map(tagEntity -> tagViews.add(new TagView(tagEntity)));
+		this.tagRepository.findAll().stream().forEach(tagEntity -> tagViews.add(new TagView(tagEntity)));
 		return tagViews;
 	}
 
 	@Override
 	public TagView getTagById(Long id) {
 		Optional<TagEntity> tagOptional = tagRepository.findById(id);
-		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
+		return !tagOptional.isPresent() ? TagView.NotFound : new TagView(tagOptional.get());
 	}
 
 	@Override
 	public TagView getTagByName(String name) {
 		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
-		return !tagOptional.isPresent() ? null : new TagView(tagOptional.get());
+		return !tagOptional.isPresent() ? TagView.NotFound : new TagView(tagOptional.get());
 	}
 
 	@Override
@@ -52,13 +52,10 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	public List<TagView> saveTagList(List<TagView> tagViews) {
-		List<TagView> tagsToCreate = tagViews.stream().filter(tagView -> tagView.getId() == null)
+	public List<TagView> saveTagList(List<TagView> tagViewsToSave) {
+		List<TagView> SaveTagViews = tagViewsToSave.stream().map(tagView -> saveTag(tagView))
 				.collect(Collectors.toList());
-		// remove pre-existent tags to create so that they can be replaced
-		tagViews.removeAll(tagsToCreate);
-		tagsToCreate.stream().map(tagView -> saveTag(tagView)).forEach(tagView -> tagViews.add(tagView));
-		return tagViews;
+		return SaveTagViews;
 	}
 
 	@Override
