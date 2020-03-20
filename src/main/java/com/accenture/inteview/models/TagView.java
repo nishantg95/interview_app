@@ -1,5 +1,6 @@
 package com.accenture.inteview.models;
 
+import java.util.Collections;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public class TagView {
+
+	public static TagView NotFound = new TagView(new Long(0), "Tag Not Found", Collections.emptySet());
 
 	private Long id;
 
@@ -28,6 +31,12 @@ public class TagView {
 
 	public TagView(TagEntity tagEntity) {
 		BeanUtils.copyProperties(tagEntity, this);
+	}
+
+	public TagView(Long id, String name, Set<QuestionView> questions) {
+		this.id = id;
+		this.name = name;
+		this.questions = questions;
 	}
 
 	public Long getId() {

@@ -64,7 +64,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	public QuestionView getQuestionById(Long id) {
 		Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
-		return !questionOptional.isPresent() ? null : new QuestionView(questionOptional.get());
+		return !questionOptional.isPresent() ? QuestionView.NotFound : new QuestionView(questionOptional.get());
 	}
 
 	@Override
@@ -79,7 +79,6 @@ public class QuestionServiceImpl implements QuestionService {
 		QuestionEntity questionEntity = new QuestionEntity(questionView);
 		QuestionEntity updatedQuestion = questionRepository.save(questionEntity);
 		return new QuestionView(updatedQuestion);
-
 	}
 
 	@Override
