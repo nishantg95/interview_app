@@ -16,14 +16,13 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.springframework.beans.BeanUtils;
 
-import com.accenture.inteview.models.Question;
-import com.accenture.inteview.models.Tag;
+import com.accenture.inteview.models.TagView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Indexed
 @Table(name = "TAG")
-public class TagEntity implements Tag {
+public class TagEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,52 +37,35 @@ public class TagEntity implements Tag {
 	@ManyToMany(mappedBy = "tags")
 	Set<QuestionEntity> questions;
 
-	public TagEntity() {
-	}
-
-	public TagEntity(Tag tag) {
-		BeanUtils.copyProperties(tag, this, Tag.class);
-	}
-
-	/**
-	 * @param id
-	 * @param name
-	 * @param questions
-	 */
-	public TagEntity(String name, Set<QuestionEntity> questions) {
-		this.name = name;
-		this.questions = questions;
-	}
-
-	@Override
 	public Long getId() {
-		return this.id;
+		return id;
 	}
 
-	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	@Override
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@Override
 	public Set<QuestionEntity> getQuestions() {
-		return this.questions;
+		return questions;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setQuestions(Set<? extends Question> questions) {
-		this.questions = (Set<QuestionEntity>) questions;
-
+	public void setQuestions(Set<QuestionEntity> questions) {
+		this.questions = questions;
 	}
+
+	public TagEntity() {
+	}
+
+	public TagEntity(TagView tagView) {
+		BeanUtils.copyProperties(tagView, this);
+	}
+
 }

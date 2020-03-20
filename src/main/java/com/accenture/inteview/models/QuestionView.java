@@ -1,17 +1,18 @@
 package com.accenture.inteview.models;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.beans.BeanUtils;
-
+import com.accenture.inteview.entities.QuestionEntity;
+import com.accenture.inteview.entities.TagEntity;
 import com.accenture.inteview.util.ToLowerCaseDeserializer;
 import com.accenture.inteview.util.ToLowerCaseSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class QuestionView implements Question {
+public class QuestionView {
 
 	private Long id;
 
@@ -31,15 +32,24 @@ public class QuestionView implements Question {
 	Set<TagView> tags;
 
 	public QuestionView() {
-
 	}
 
-	public QuestionView(Question question) {
-		BeanUtils.copyProperties(question, this, Question.class);
+	public QuestionView(QuestionEntity questionEntity) {
+		this.id = questionEntity.getId();
+		this.title = questionEntity.getTitle();
+		this.body = questionEntity.getBody();
+		this.comment = questionEntity.getComment();
+		this.added_by = questionEntity.getAdded_by();
+		Set<TagEntity> tagEntities = questionEntity.getTags();
+		Set<TagView> tagViews = new HashSet<TagView>();
+		for (TagEntity tagEntity : tagEntities) {
+			tagViews.add(new TagView(tagEntity));
+		}
+		this.tags = tagViews;
 	}
 
 	public Long getId() {
-		return this.id;
+		return id;
 	}
 
 	public void setId(Long id) {
@@ -47,7 +57,7 @@ public class QuestionView implements Question {
 	}
 
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 
 	public void setTitle(String title) {
@@ -55,7 +65,7 @@ public class QuestionView implements Question {
 	}
 
 	public String getBody() {
-		return this.body;
+		return body;
 	}
 
 	public void setBody(String body) {
@@ -63,7 +73,7 @@ public class QuestionView implements Question {
 	}
 
 	public String getComment() {
-		return this.comment;
+		return comment;
 	}
 
 	public void setComment(String comment) {
@@ -71,7 +81,7 @@ public class QuestionView implements Question {
 	}
 
 	public String getAdded_by() {
-		return this.added_by;
+		return added_by;
 	}
 
 	public void setAdded_by(String added_by) {
@@ -79,17 +89,11 @@ public class QuestionView implements Question {
 	}
 
 	public Set<TagView> getTags() {
-		return this.tags;
+		return tags;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void setTags(Set<? extends Tag> tags) {
-		this.tags = (Set<TagView>) tags;
+	public void setTags(Set<TagView> tags) {
+		this.tags = tags;
 	}
 
-	@Override
-	public String toString() {
-		return "QuestionView [id=" + id + ", title=" + title + ", body=" + body + ", comment=" + comment + ", added_by="
-				+ added_by + ", tags=" + tags + "]";
-	}
 }

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accenture.inteview.models.Tag;
 import com.accenture.inteview.models.TagView;
 import com.accenture.inteview.services.TagService;
 
@@ -40,65 +39,61 @@ public class TagController {
 	}
 
 	@GetMapping("/getAllTags")
-	public ResponseEntity<List<Tag>> listAllTags() {
-		List<Tag> tags = this.tagService.getAllTags();
-		if (tags.isEmpty()) {
-			return new ResponseEntity<List<Tag>>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<List<TagView>> listAllTags() {
+
+		List<TagView> tagViews = this.tagService.getAllTags();
+		if (tagViews.isEmpty()) {
+			return new ResponseEntity<List<TagView>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<Tag>>(tags, HttpStatus.OK);
+		return new ResponseEntity<List<TagView>>(tagViews, HttpStatus.OK);
 	}
 
 	@GetMapping("/getTag/{id}")
-	public ResponseEntity<Tag> getTagById(@PathVariable Long id) {
+	public ResponseEntity<TagView> getTagById(@PathVariable Long id) {
 
-		Tag retrievedTag = tagService.getTagById(id);
+		TagView retrievedTag = tagService.getTagById(id);
 		if (retrievedTag == null) {
-			return new ResponseEntity<Tag>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<TagView>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Tag>(retrievedTag, HttpStatus.OK);
+		return new ResponseEntity<TagView>(retrievedTag, HttpStatus.OK);
 	}
 
 	@GetMapping("/getTag/name/{name}")
-	public ResponseEntity<Tag> getTagByName(@PathVariable String name) {
-		Tag retrievedTag = tagService.getTagByName(name);
+	public ResponseEntity<TagView> getTagByName(@PathVariable String name) {
+		TagView retrievedTag = tagService.getTagByName(name);
 		if (retrievedTag == null) {
-			return new ResponseEntity<Tag>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<TagView>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<Tag>(retrievedTag, HttpStatus.OK);
+		return new ResponseEntity<TagView>(retrievedTag, HttpStatus.OK);
 	}
 
 	@PostMapping("/createTag")
-	public ResponseEntity<Tag> createTag(@Valid @RequestBody TagView tagView, BindingResult result) {
+	public ResponseEntity<TagView> createTag(@Valid @RequestBody TagView tagView, BindingResult result) {
 		if (result.hasErrors()) {
-			return new ResponseEntity<Tag>(HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<TagView>(HttpStatus.NOT_ACCEPTABLE);
 		}
-		Tag retrievedTag = tagService.getTagByName(tagView.getName());
+		TagView retrievedTag = tagService.getTagByName(tagView.getName());
 		if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
-			return new ResponseEntity<Tag>(HttpStatus.IM_USED);
+			return new ResponseEntity<TagView>(HttpStatus.IM_USED);
 		}
-		Tag savedTag = this.tagService.addTag(tagView);
+		TagView savedTag = this.tagService.saveTag(tagView);
 		return new ResponseEntity<>(savedTag, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/createTags")
-	public ResponseEntity<List<TagView>> createTags(@Valid @RequestBody List<TagView> tagViews, BindingResult result) {
+	public ResponseEntity<List<TagView>> saveTagList(@Valid @RequestBody List<TagView> tagViews, BindingResult result) {
 		if (result.hasErrors()) {
 			return new ResponseEntity<List<TagView>>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		for (TagView tagView : tagViews) {
-			Tag retrievedTag = tagService.getTagByName(tagView.getName());
+			TagView retrievedTag = tagService.getTagByName(tagView.getName());
 			if (retrievedTag != null && retrievedTag.getName().equalsIgnoreCase(tagView.getName())) {
 				return new ResponseEntity<List<TagView>>(HttpStatus.IM_USED);
 			}
 		}
-		List<TagView> retrievedTags = tagService.addTags(tagViews);
+		List<TagView> retrievedTags = tagService.saveTagList(tagViews);
 		return new ResponseEntity<List<TagView>>(retrievedTags, HttpStatus.CREATED);
 	}
-
-//	@PutMapping("/updateTag")
-//	public ResponseEntity<Tag> updateTag(@RequestBody TagView tagview) {
-//		Tag updatedTag = this.tagService.updateTag(tagview);
-//		return new ResponseEntity<Tag>(updatedTag, HttpStatus.OK);
 
 	@DeleteMapping("/deleteTag")
 	public ResponseEntity<HttpStatus> deleteTag(@RequestBody TagView tagView) {

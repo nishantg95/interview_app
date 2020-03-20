@@ -1,10 +1,8 @@
 package com.accenture.inteview.services;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 
@@ -19,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.accenture.inteview.entities.QuestionEntity;
 import com.accenture.inteview.entities.TagEntity;
-import com.accenture.inteview.models.Question;
 import com.accenture.inteview.models.QuestionView;
-import com.accenture.inteview.models.Tag;
 
 @Service
 @Transactional
@@ -30,44 +26,28 @@ public class HibernateSearchServiceImpl implements HibernateSearchService {
 	@Autowired
 	private EntityManager entityManager;
 
-	public Set<Question> searchTitleAndBodyByKeyword(String text) {
-		System.out.println(" HibernateSearchServiceImpl searchQuestionsBykeyword. text= " + text);
-		Set<Question> questionEntities = new HashSet<>();
-		Set<Question> questionViews = new HashSet<>();
+	public Set<QuestionView> searchTitleAndBodyByKeyword(String text) {
+		Set<QuestionView> questionViews = new HashSet<>();
 		Query keywordQuery = getQueryBuilderForQuestion().keyword().onFields("title", "body").matching(text)
 				.createQuery();
 		@SuppressWarnings("unchecked")
-		List<QuestionEntity> results = getJpaQueryForQuestion(keywordQuery).getResultList();
-		System.out.println(" HibernateSearchServiceImpl searchQuestionsBykeyword. results= " + results);
-		results.forEach(System.out::println);
-		System.out.println("result" + Arrays.toString(results.toArray()));
-
-		questionEntities = results.stream().collect(Collectors.toSet());
-		for (Question question : questionEntities) {
-			Question questionView = new QuestionView(question);
-			questionViews.add(questionView);
-		}
-		return questionViews.isEmpty() ? null : questionViews;
+		List<QuestionEntity> questionEntities = getJpaQueryForQuestion(keywordQuery).getResultList();
+		questionEntities.stream().forEach(question -> questionViews.add(new QuestionView(question)));
+		return questionViews;
 	}
 
-	public Set<Question> getQuestionsByTagsNames(String[] tagsNames) {
-		System.out.println(" HibernateSearchServiceImpl getQuestionsByTagsNames. tagsNames= " + tagsNames);
-		Set<Question> questionEntities = new HashSet<>();
-		Set<Question> questionViews = new HashSet<>();
+	public Set<QuestionView> getQuestionsByTagsNames(String[] tagsNames) {
+		Set<QuestionEntity> questionEntities = new HashSet<>();
+		Set<QuestionView> questionViews = new HashSet<>();
 		for (String tagName : tagsNames) {
 			Query tagQuery = getQueryBuilderForTag().keyword().onFields("name").matching(tagName).createQuery();
-			Tag retrievedTag = (Tag) getJpaQueryForTag(tagQuery).getResultList().get(0);
+			TagEntity retrievedTag = (TagEntity) getJpaQueryForTag(tagQuery).getResultList().get(0);
 			if (retrievedTag != null) {
 				questionEntities.addAll(retrievedTag.getQuestions());
 			}
 		}
-		System.out
-				.println(" HibernateSearchServiceImpl getQuestionsByTagsNames. questionEntities= " + questionEntities);
-		for (Question question : questionEntities) {
-			Question questionView = new QuestionView(question);
-			questionViews.add(questionView);
-		}
-		return questionViews.isEmpty() ? null : questionViews;
+		questionEntities.stream().forEach(question -> questionViews.add(new QuestionView(question)));
+		return questionViews;
 	}
 
 	private FullTextQuery getJpaQueryForQuestion(org.apache.lucene.search.Query luceneQuery) {

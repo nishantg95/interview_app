@@ -1,5 +1,6 @@
 package com.accenture.inteview.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,15 +17,14 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import org.springframework.beans.BeanUtils;
 
-import com.accenture.inteview.models.Question;
-import com.accenture.inteview.models.Tag;
+import com.accenture.inteview.models.QuestionView;
+import com.accenture.inteview.models.TagView;
 
 @Indexed
 @Entity
 @Table(name = "QUESTION")
-public class QuestionEntity implements Question {
+public class QuestionEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,24 +53,22 @@ public class QuestionEntity implements Question {
 	public QuestionEntity() {
 	}
 
-	public QuestionEntity(Question question) {
-		BeanUtils.copyProperties(question, this, Question.class);
-	}
-
-	/**
-	 * @param id
-	 * @param body
-	 * @param comment
-	 * @param tags
-	 */
-	public QuestionEntity(String body, String comment, Set<TagEntity> tags) {
-		this.body = body;
-		this.comment = comment;
-		this.tags = tags;
+	public QuestionEntity(QuestionView questionView) {
+		this.id = questionView.getId();
+		this.title = questionView.getTitle();
+		this.body = questionView.getBody();
+		this.comment = questionView.getComment();
+		this.added_by = questionView.getAdded_by();
+		Set<TagView> tagViews = questionView.getTags();
+		Set<TagEntity> tagEntities = new HashSet<TagEntity>();
+		for (TagView tagView : tagViews) {
+			tagEntities.add(new TagEntity(tagView));
+		}
+		this.tags = tagEntities;
 	}
 
 	public Long getId() {
-		return this.id;
+		return id;
 	}
 
 	public void setId(Long id) {
@@ -78,7 +76,7 @@ public class QuestionEntity implements Question {
 	}
 
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 
 	public void setTitle(String title) {
@@ -86,7 +84,7 @@ public class QuestionEntity implements Question {
 	}
 
 	public String getBody() {
-		return this.body;
+		return body;
 	}
 
 	public void setBody(String body) {
@@ -94,7 +92,7 @@ public class QuestionEntity implements Question {
 	}
 
 	public String getComment() {
-		return this.comment;
+		return comment;
 	}
 
 	public void setComment(String comment) {
@@ -102,7 +100,7 @@ public class QuestionEntity implements Question {
 	}
 
 	public String getAdded_by() {
-		return this.added_by;
+		return added_by;
 	}
 
 	public void setAdded_by(String added_by) {
@@ -110,12 +108,11 @@ public class QuestionEntity implements Question {
 	}
 
 	public Set<TagEntity> getTags() {
-		return this.tags;
+		return tags;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setTags(Set<? extends Tag> tags) {
-		this.tags = (Set<TagEntity>) tags;
+	public void setTags(Set<TagEntity> tags) {
+		this.tags = tags;
 	}
+
 }
