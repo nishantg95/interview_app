@@ -1,8 +1,10 @@
 <app-navbar> </app-navbar>
+<app-sidebar></app-sidebar>
+
 <div class="container-sm">
   <button
     class="btn btn-secondary"
-    data-toggle="collapse"
+    data-toggle="collapsed"
     data-target=".collapse"
     aria-expanded="false"
     (click)="showPreview = !showPreview"
@@ -22,6 +24,7 @@
       >for the tag(s): <b>{{ this.tag }}</b></span
     >
   </div>
+
   <div class="container" *ngIf="toggleView === true">
     <div class="container pt-1">
       <div
@@ -34,15 +37,26 @@
               <h5>{{ i + 1 }}. {{ question.title }}</h5>
             </div>
             <div class="col-4" id="button_bar">
-              <button class="btn slide_button btn-warning mr-2" id="edit_{{ i }}" (click)="routeToEditForm(question)">
+              <button
+                class="btn slide_button btn-warning mr-2"
+                id="edit_{{ i }}"
+                (click)="routeToEditForm(question)"
+              >
                 <i class="icon fas fa-pen"></i>
                 <span class="button_label">&nbsp;Edit</span>
               </button>
-              <button class="btn slide_button btn-danger mr-2" id="delete_{{ i }}">
+              <button
+                class="btn slide_button btn-danger mr-2"
+                id="delete_{{ i }}"
+              >
                 <i class="icon fas fa-trash"></i>
                 <span class="button_label">&nbsp;Delete</span>
               </button>
-              <button class="btn slide_button btn-primary disabled" id="copy_{{ i }}">
+              <button
+                class="btn slide_button btn-primary disabled"
+                id="copy_{{ i }}"
+                (click)="copyQuestionToClipboard(question)"
+              >
                 <i class="icon fas fa-clipboard"></i>
                 <span class="button_label">&nbsp;Copy</span>
               </button>
@@ -116,7 +130,7 @@
 </div> -->
 
 <!-- Accodian View -->
-<!-- <div class="container" *ngIf="toggleView === false">
+<div class="container" *ngIf="toggleView === false">
   <div
     class="container-fluid"
     *ngFor="let question of questions.reverse(); let i = index"
@@ -130,12 +144,10 @@
           [attr.data-target]="'#collapse_' + i"
           aria-expanded="false"
           [attr.aria-controls]="'collapse_' + i"
-          (click)="showPreview=!showPreview"
+          (click)="showPreview = !showPreview"
         >
           <div class="container-fluid">
-            <h5 class="mb-0">
-              {{i+1}}. {{ question.title }}
-            </h5>
+            <h5 class="mb-0">{{ i + 1 }}. {{ question.title }}</h5>
           </div>
           <div class="container-fluid">
             <div class="row pl-3">
@@ -170,4 +182,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>

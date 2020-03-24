@@ -3,10 +3,9 @@
   border: 1px solid #d4d4d4;
   border-bottom: none;
   border-top: none;
-  max-width: 90%;
+  width:parent;
   z-index: 99;
   top: 110%;
-  overflow-wrap: inherit;
 
   /* left: 0;
   right: 0; */
@@ -14,12 +13,11 @@
 }
 
 
-.searchPrompt:hover {
-  /*when hovering an item:*/
+/* .searchPrompt:hover {
   background-color: DodgerBlue;
   color: #ffffff;
   overflow-wrap: inherit;
-}
+} */
 
 
 .addQuestion span {

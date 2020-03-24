@@ -4,6 +4,7 @@ import { Tag } from '../interfaces/tag';
 import { QuestionService } from '../question.service';
 import { TagService } from '../tag.service';
 import { Router } from '@angular/router';
+import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-list-of-questions',
@@ -13,17 +14,21 @@ import { Router } from '@angular/router';
 export class ListOfQuestionsComponent implements OnInit, OnChanges {
   @Input() state: string;
   @Input() tag: string;
+  @Input() searchTerm: string;
   questions: Question[] = [];
+  tags: Tag[] = [];
   showPreview = true;
   toggleView = true;
   key = 'editQuestion';
   constructor(
     private questionService: QuestionService,
     private tagService: TagService,
+    private searchService: SearchService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.getAlltags();
     if (this.state == null) {
       this.listAllQuestions();
     }
@@ -32,6 +37,9 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   ngOnChanges(): void {
     if (this.state === 'tag') {
       this.listAllQuestionsTagged(this.tag);
+    } else if(this.state === 'search'){
+      this.listAllQuestionswithKeywords(this.searchTerm);
+
     }
   }
 
@@ -49,6 +57,18 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
       );
   }
 
+  listAllQuestionswithKeywords(searchTerm: string) {
+    this.searchService
+      .searchByKeyword(searchTerm)
+      .subscribe(
+        questionsResponse => (this.questions = questionsResponse)
+      );
+  }
+
+  getAlltags(){
+    this.tagService.listAllTags().subscribe(tags => this.tags = tags);
+  }
+
   compareTagName(a: Tag, b: Tag) {
     if (a.name < b.name) {
       return -1;
@@ -62,5 +82,20 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   routeToEditForm(question: Question) {
     this.router[this.key] = question;
     this.router.navigateByUrl('/editQuestion');
+  }
+
+  copyQuestionToClipboard(question: Question){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = 'Interview Question\nTitle: ' + question.title + '\nBody: ' + question.body + '\nComments:' + question.comment;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    console.log('copied');
   }
 }

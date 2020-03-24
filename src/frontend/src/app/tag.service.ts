@@ -60,7 +60,7 @@ export class TagService {
 
   addTags(tags: Tag[]): Observable<Tag[]> {
     const response = this.http
-      .post<Tag[]>(endpoint + '/createTags', tags, httpOptions)
+      .post<Tag[]>(endpoint + '/createTagList', tags, httpOptions)
       .pipe(
         // tap(_ => this.log(`deleted item id=${item.id}`)),
         catchError(this.handleError<Tag[]>('addTags'))

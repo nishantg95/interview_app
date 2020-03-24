@@ -34,13 +34,13 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public TagView getTagById(Long id) {
-		Optional<TagEntity> tagOptional = tagRepository.findById(id);
+		Optional<TagEntity> tagOptional = this.tagRepository.findById(id);
 		return !tagOptional.isPresent() ? TagView.NotFound : new TagView(tagOptional.get());
 	}
 
 	@Override
 	public TagView getTagByName(String name) {
-		Optional<TagEntity> tagOptional = tagRepository.findByNameIgnoreCase(name);
+		Optional<TagEntity> tagOptional = this.tagRepository.findByNameIgnoreCase(name);
 		return !tagOptional.isPresent() ? TagView.NotFound : new TagView(tagOptional.get());
 	}
 
@@ -53,7 +53,7 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	public List<TagView> saveTagList(List<TagView> tagViewsToSave) {
-		List<TagView> SaveTagViews = tagViewsToSave.stream().map(tagView -> saveTag(tagView))
+		List<TagView> SaveTagViews = tagViewsToSave.stream().map(tagView -> this.saveTag(tagView))
 				.collect(Collectors.toList());
 		return SaveTagViews;
 	}
