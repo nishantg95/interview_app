@@ -15,7 +15,7 @@ import { QuestionViewComponent } from './question-view/question-view.component';
 import { QuestionsByTagNameComponent } from './questions-by-tag-name/questions-by-tag-name.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+// import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     QuestionsByTagNameComponent,
     PageNotFoundComponent,
     NavbarComponent,
-    SidebarComponent
+    // SidebarComponent
   ],
   imports: [
     BrowserModule,

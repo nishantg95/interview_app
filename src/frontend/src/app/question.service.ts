@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Question } from './interfaces/question';
 
 const endpoint = 'http://localhost:8080/api/questions';
+const searchEndpoint = 'http://localhost:8080/api/search';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -44,6 +45,14 @@ export class QuestionService {
     this.questions = this.http
       .get<Question[]>(endpoint + '/getAllQuestions', httpOptions)
       .pipe(catchError(this.handleError<Question[]>('listAllQuestions', [])));
+    return this.questions;
+  }
+  searchByKeyword(searchTerm: string): Observable<Question[]> {
+    this.questions = this.http
+      .get<Question[]>(searchEndpoint + '/searchQuestions/keyword/', {
+        params: { keyword: searchTerm }
+      })
+      .pipe(catchError(this.handleError<Question[]>('searchByKeyword', [])));
     return this.questions;
   }
 

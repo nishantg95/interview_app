@@ -4,17 +4,19 @@ import { Tag } from '../interfaces/tag';
 import { QuestionService } from '../question.service';
 import { TagService } from '../tag.service';
 import { Router } from '@angular/router';
-import { SearchService } from '../search.service';
+import { EventBusService } from '../event-bus.service';
+// import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-list-of-questions',
   templateUrl: './list-of-questions.component.html',
   styleUrls: ['./list-of-questions.component.css']
 })
-export class ListOfQuestionsComponent implements OnInit, OnChanges {
+export class ListOfQuestionsComponent implements OnInit /*, OnChanges*/ {
   @Input() state: string;
   @Input() tag: string;
-  @Input() searchTerm: string;
+ // @Input() searchTerm: string;
+   searchTermK: string;
   questions: Question[] = [];
   tags: Tag[] = [];
   showPreview = true;
@@ -23,25 +25,30 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   constructor(
     private questionService: QuestionService,
     private tagService: TagService,
-    private searchService: SearchService,
-    private router: Router
+    // private searchService: SearchService,
+    private router: Router,
+    private eventBusService: EventBusService
   ) {}
 
   ngOnInit(): void {
+    this.eventBusService.on('searchTerm', (data: string ) => {  
+      console.log(data)
+      this.listAllQuestionswithKeywords(data)
+    });
     this.getAlltags();
     if (this.state == null) {
       this.listAllQuestions();
     }
   }
 
-  ngOnChanges(): void {
-    if (this.state === 'tag') {
-      this.listAllQuestionsTagged(this.tag);
-    } else if(this.state === 'search'){
-      this.listAllQuestionswithKeywords(this.searchTerm);
+  // ngOnChanges(): void {
+  //   if (this.state === 'tag') {
+  //     this.listAllQuestionsTagged(this.tag);
+  //   } else if(this.state === 'search'){
+  //     this.listAllQuestionswithKeywords(this.searchTerm);
 
-    }
-  }
+  //   }
+  // }
 
   listAllQuestions(): void {
     this.questionService
@@ -58,8 +65,9 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
   }
 
   listAllQuestionswithKeywords(searchTerm: string) {
-    this.searchService
-      .searchByKeyword(searchTerm)
+  //  this.searchService
+  //.searchByKeyword(searchTerm)
+  this.questionService.searchByKeyword(searchTerm)
       .subscribe(
         questionsResponse => (this.questions = questionsResponse)
       );

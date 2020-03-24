@@ -16,6 +16,7 @@ const routes: Routes = [
   {path: 'questions/tagged/:name', component: QuestionsByTagNameComponent},
   {path: 'addQuestion', component: QuestionFormComponent},
   {path: 'editQuestion', component: QuestionFormComponent},
+  {path: 'search', component: ListOfQuestionsComponent},
   // {path: 'tags/:name', component: TagsComponent},
   {path: 'question/:id', component: QuestionViewComponent},
   {path: '', redirectTo: 'questions', pathMatch: 'full' },
