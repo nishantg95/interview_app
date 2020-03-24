@@ -26,7 +26,7 @@ This webapp provides a platform to store interview questions in a "question bank
 <li>Start back end services in Eclipse
   <ul>
     <li>If using Spring Boot Dashboard, the app will show up as interview_app_backend[devtools][:8080]</li>
-    <li>Otherwise, run class <a href="/interview_app_backend/src/main/java/com/accenture/inteview/InterviewBackendApplication.java">InterviewBackendApplication.java</a> as main class</li>
+    <li>Otherwise, run class <a href="src/main/java/com/accenture/inteview/InterviewBackendApplication.java">InterviewBackendApplication.java</a> as main class</li>
   </ul>
 </li>
 <li>Start Front End services in any terminal
