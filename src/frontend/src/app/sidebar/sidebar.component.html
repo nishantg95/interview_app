@@ -1,0 +1,15 @@
+<div id="mySidebar" class="sidebar">
+  <a class="closebtn" (click)="closeNav()">&times;</a>
+  <div class ="row ml-3" *ngFor="let tag of tags">
+    <input class="mt-2" type="checkbox" />&nbsp;
+    <label [routerLink]="['/questions/tagged', tag.name]">{{tag.name}}</label>
+    <!-- <app-tags
+      [tag]="tag"
+
+    ></app-tags> -->
+  </div>
+</div>
+
+<div id="col-3">
+  <button class="openbtn" (click)="openNav()">&#9776; Filters</button>
+</div>
