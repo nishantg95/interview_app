@@ -46,6 +46,12 @@ export class QuestionService {
       .pipe(catchError(this.handleError<Question[]>('listAllQuestions', [])));
     return this.questions;
   }
+  listQuestionsByTagName(name): Observable<Question[]> {
+    this.questions = this.http
+      .get<Question[]>(endpoint + '/getQuestions/tag/' + name , httpOptions)
+      .pipe(catchError(this.handleError<Question[]>('listAllQuestions', [])));
+    return this.questions;
+  }
 
   deleteQuestion(question: Question): Observable<{}> {
     const response = this.http

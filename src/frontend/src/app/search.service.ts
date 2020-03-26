@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map, tap, filter } from 'rxjs/operators';
 import { Question } from './interfaces/question';
+import { EventBusService } from './event-bus.service';
+import { EventData } from './interfaces/event.class';
 
 const endpoint = 'http://localhost:8080/api/search';
 const httpOptions = {
@@ -15,7 +17,8 @@ const httpOptions = {
 })
 export class SearchService {
   questions: Observable<Question[]>;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private eventBusService: EventBusService) { }
 
   /**
    * Handle Http operation that failed.
@@ -37,12 +40,10 @@ export class SearchService {
     };
   }
 
-  searchByKeyword(searchTerm: string): Observable<Question[]> {
-    this.questions = this.http
+  searchByKeyword(searchTerm: string): Observable<HttpResponse<Question[]>> {
+    return this.http
       .get<Question[]>(endpoint + '/searchQuestions/keyword/', {
-        params: { keyword: searchTerm }
-      })
-      .pipe(catchError(this.handleError<Question[]>('searchByKeyword', [])));
-    return this.questions;
+        params: { keyword: searchTerm }, observe: 'response'})
+    // .pipe(catchError(this.handleError<HttpResponse<Question[]>('searchByKeyword', [])));
   }
 }

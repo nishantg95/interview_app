@@ -13,7 +13,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 
 const routes: Routes = [
   {path: 'questions', component: ListOfQuestionsComponent},
-  {path: 'questions/tagged/:name', component: QuestionsByTagNameComponent},
+  {path: 'search/:searchTerm', component: ListOfQuestionsComponent},
+  {path: 'tagged/:name', component: QuestionsByTagNameComponent},
   {path: 'addQuestion', component: QuestionFormComponent},
   {path: 'editQuestion', component: QuestionFormComponent},
   // {path: 'tags/:name', component: TagsComponent},

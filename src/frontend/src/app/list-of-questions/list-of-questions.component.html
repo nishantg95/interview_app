@@ -77,7 +77,7 @@
               <app-tags
                 *ngFor="let tag of question.tags?.sort(compareTagName)"
                 [tag]="tag"
-                [routerLink]="['/questions/tagged', tag.name]"
+                [routerLink]="['/tagged', tag.name]"
               ></app-tags>
             </div>
           </div>
@@ -155,7 +155,7 @@
               <app-tags
                 *ngFor="let tag of question.tags.sort(compareTagName)"
                 [tag]="tag"
-                [routerLink]="['/questions/tagged', tag.name]"
+                [routerLink]="['/tagged', tag.name]"
               ></app-tags>
             </div>
           </div>

@@ -3,18 +3,24 @@ import { Question } from '../interfaces/question';
 import { Tag } from '../interfaces/tag';
 import { QuestionService } from '../question.service';
 import { TagService } from '../tag.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SearchService } from '../search.service';
+import { EventBusService } from '../event-bus.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { switchMap, filter, map, flatMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-of-questions',
   templateUrl: './list-of-questions.component.html',
   styleUrls: ['./list-of-questions.component.css']
 })
-export class ListOfQuestionsComponent implements OnInit, OnChanges {
+export class ListOfQuestionsComponent implements OnInit {
+  searchQuestions$: Observable<Question[]>;
+  taggedQuestions$: Observable<Question[]>
+  currentUrl$ = new BehaviorSubject<string>('');
+  currentHttpStatus$ = new BehaviorSubject<number>(null);
   @Input() state: string;
   @Input() tag: string;
-  @Input() searchTerm: string;
   questions: Question[] = [];
   tags: Tag[] = [];
   showPreview = true;
@@ -24,48 +30,47 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
     private questionService: QuestionService,
     private tagService: TagService,
     private searchService: SearchService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
-    this.getAlltags();
-    if (this.state == null) {
-      this.listAllQuestions();
-    }
+    this.route.url.subscribe(url => {
+      this.currentUrl$.next(url[0].path);
+    });
+    this.listQuestionsforHomeUrl().subscribe(x => this.questions = x);
+    this.listQuestionsbyTag().subscribe(x => this.questions = x);
+    this.listQuestionsByKeyword().subscribe(x => {
+      this.questions = x.body;
+      this.getNoContent().subscribe(() => this.questions = []);
+    });
   }
 
-  ngOnChanges(): void {
-    if (this.state === 'tag') {
-      this.listAllQuestionsTagged(this.tag);
-    } else if(this.state === 'search'){
-      this.listAllQuestionswithKeywords(this.searchTerm);
-
-    }
+  listQuestionsforHomeUrl() {
+    return this.currentUrl$.pipe(
+      filter(url => url === 'questions'),
+      flatMap(() => this.questionService.listAllQuestions()))
   }
 
-  listAllQuestions(): void {
-    this.questionService
-      .listAllQuestions()
-      .subscribe(questions => (this.questions = questions));
+  listQuestionsByKeyword() {
+    return this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => this.searchService.searchByKeyword(params.get('searchTerm')))
+    ).pipe(
+      tap(response => this.currentHttpStatus$.next(response.status)))
   }
 
-  listAllQuestionsTagged(tag: string) {
-    this.tagService
-      .getTagByName(tag)
-      .subscribe(
-        tagResponse => (this.questions = Array.from(tagResponse.questions))
-      );
+  getNoContent() {
+    return this.currentHttpStatus$.pipe(
+      filter(status => status === 204))
   }
 
-  listAllQuestionswithKeywords(searchTerm: string) {
-    this.searchService
-      .searchByKeyword(searchTerm)
-      .subscribe(
-        questionsResponse => (this.questions = questionsResponse)
-      );
+  listQuestionsbyTag() {
+    return this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => this.questionService.listQuestionsByTagName(params.get('name')))
+    );
   }
 
-  getAlltags(){
+  getAlltags() {
     this.tagService.listAllTags().subscribe(tags => this.tags = tags);
   }
 
@@ -84,7 +89,7 @@ export class ListOfQuestionsComponent implements OnInit, OnChanges {
     this.router.navigateByUrl('/editQuestion');
   }
 
-  copyQuestionToClipboard(question: Question){
+  copyQuestionToClipboard(question: Question) {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';
