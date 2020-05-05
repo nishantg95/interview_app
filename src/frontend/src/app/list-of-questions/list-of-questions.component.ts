@@ -1,13 +1,12 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { Question } from '../interfaces/question';
 import { Tag } from '../interfaces/tag';
 import { QuestionService } from '../question.service';
-import { TagService } from '../tag.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { SearchService } from '../search.service';
-import { EventBusService } from '../event-bus.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { switchMap, filter, map, flatMap, tap } from 'rxjs/operators';
+import { TagService } from '../tag.service';
 
 @Component({
   selector: 'app-list-of-questions',
@@ -15,8 +14,8 @@ import { switchMap, filter, map, flatMap, tap } from 'rxjs/operators';
   styleUrls: ['./list-of-questions.component.css']
 })
 export class ListOfQuestionsComponent implements OnInit {
-  searchQuestions$: Observable<Question[]>;
-  taggedQuestions$: Observable<Question[]>
+  searchQuestions$ = new BehaviorSubject<Question[]>([]);
+  taggedQuestions$ = new BehaviorSubject<Question[]>([]);
   currentUrl$ = new BehaviorSubject<string>('');
   currentHttpStatus$ = new BehaviorSubject<number>(null);
   @Input() state: string;
@@ -38,37 +37,58 @@ export class ListOfQuestionsComponent implements OnInit {
     this.route.url.subscribe(url => {
       this.currentUrl$.next(url[0].path);
     });
-    this.listQuestionsforHomeUrl().subscribe(x => this.questions = x);
-    this.listQuestionsbyTag().subscribe(x => this.questions = x);
-    this.listQuestionsByKeyword().subscribe(x => {
-      this.questions = x.body;
-      this.getNoContent().subscribe(() => this.questions = []);
-    });
+    this.listQuestionsforHomeUrl();
+    this.listQuestionsByTag();
+    this.listQuestionsByKeyword();
+    this.getNoContent();
   }
 
   listQuestionsforHomeUrl() {
-    return this.currentUrl$.pipe(
-      filter(url => url === 'questions'),
-      flatMap(() => this.questionService.listAllQuestions()))
+    this.getUrlPath('questions').pipe(
+      switchMap(() => this.questionService.listAllQuestions()))
+      .subscribe(x => this.questions = x)
   }
 
   listQuestionsByKeyword() {
-    return this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => this.searchService.searchByKeyword(params.get('searchTerm')))
-    ).pipe(
-      tap(response => this.currentHttpStatus$.next(response.status)))
+    this.getUrlPath('search').pipe(map(url => {
+      console.log("the url is " + url)
+      this.route.paramMap.pipe(
+        switchMap((params: ParamMap) => this.searchService.searchByKeyword(params.get('searchTerm'))))
+        .subscribe(x => {
+          this.questions = x.body;
+          this.currentHttpStatus$.next(x.status)
+        });
+    })).subscribe()
+  }
+
+  listQuestionsByTag() {
+    this.getUrlPath('tagged').pipe(
+      map(url => {
+        console.log("the url is " + url)
+        this.route.paramMap.pipe(
+          switchMap((params: ParamMap) => this.questionService.listQuestionsByTagName(params.get('name'))))
+          .subscribe(x => this.questions = x);
+      })).subscribe();
   }
 
   getNoContent() {
-    return this.currentHttpStatus$.pipe(
-      filter(status => status === 204))
+    this.currentHttpStatus$.pipe(
+      filter(status => status === 204)).subscribe((x) => {
+        console.log("the status is " + x)
+        this.questions = []
+      })
   }
 
-  listQuestionsbyTag() {
-    return this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => this.questionService.listQuestionsByTagName(params.get('name')))
-    );
+  getUrlPath(path: string) {
+    return this.currentUrl$.pipe(
+      filter(url => url === path))
   }
+
+
+
+
+
+
 
   getAlltags() {
     this.tagService.listAllTags().subscribe(tags => this.tags = tags);

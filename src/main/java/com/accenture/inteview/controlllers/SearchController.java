@@ -34,7 +34,6 @@ public class SearchController {
 
 	@GetMapping("/searchQuestions/tags")
 	public ResponseEntity<Set<QuestionView>> searchQuestionsByTags(@RequestBody String[] tagsNames) {
-
 		Set<QuestionView> questionViews = this.searchService.getQuestionsByTagsNames(tagsNames);
 		if (questionViews.isEmpty()) {
 			return new ResponseEntity<Set<QuestionView>>(HttpStatus.NO_CONTENT);
@@ -44,8 +43,6 @@ public class SearchController {
 
 	@GetMapping("/searchQuestions/keyword")
 	public ResponseEntity<Set<QuestionView>> searchQuestionsBykeyword(@RequestParam String keyword) {
-		System.out.println(" controller searchQuestionsBykeyword. Keyword= " + keyword);
-
 		Set<QuestionView> questionViews = this.searchService.searchTitleAndBodyByKeyword(keyword);
 		if (questionViews.isEmpty()) {
 			return new ResponseEntity<Set<QuestionView>>(HttpStatus.NO_CONTENT);
