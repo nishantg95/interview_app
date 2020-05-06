@@ -1,14 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { QuestionService } from '../question.service';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Question } from '../interfaces/question';
 import { Tag } from '../interfaces/tag';
+import { QuestionService } from '../question.service';
 import { TagService } from '../tag.service';
-import { Observable, of, interval } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { QuestionViewComponent } from '../question-view/question-view.component';
-import { TagContentType } from '@angular/compiler';
 
 @Component({
   selector: 'app-questions',
@@ -55,19 +51,17 @@ export class QuestionFormComponent implements OnInit {
   onSubmit() {
     const ques: Question = this.questionForm.value;
     console.log(ques);
-    this.tagService.addTags(ques.tags).subscribe( updatedTags => {
+    this.tagService.addTags(ques.tags).subscribe(updatedTags => {
       ques.tags = updatedTags;
       if (ques.id === null) {
-        this.questionService.addQuestion(ques).subscribe();
+        this.questionService.addQuestion(ques).subscribe(() => this.router.navigateByUrl('/questions'));
       } else {
         if (ques !== this.data) {
-          this.questionService.updateQuestion(ques).subscribe();
+          this.questionService.updateQuestion(ques).subscribe(() => this.router.navigateByUrl('/questions'));
         }
       }
     });
-
     this.router[this.key] = undefined;
-    this.router.navigateByUrl('/questions');
   }
 
   @HostListener('window:beforeunload', ['$event'])
